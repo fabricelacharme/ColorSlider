@@ -7,7 +7,7 @@ ColorSlider is a trackbar control written in C# as a replacement of the standard
 It is a free interpretation of the original code from Michal Brylka published in the site Code Project.
 see https://www.codeproject.com/Articles/17395/Owner-drawn-trackbar-slider
 
-The slider shape can be either paint or replaced by an image.  
+The slider shape can be either paint or replaced by an image (ThumbImage property).  
 
 # Events:
 * ValueChanged
