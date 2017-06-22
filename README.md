@@ -15,7 +15,7 @@ The slider shape can be either paint or replaced by an image.
 
 # Properties
 
-Thumb related topics | signification
+Thumb | signification
 ------------ | -------------
 ThumbSize                 | The size of the thumb
 ThumbCustomShape          | Gets or sets the thumb custom shape. Use ThumbRect property to determine bounding rectangle.
@@ -24,12 +24,13 @@ BorderRoundRectSize       | Gets or sets the size of the border round rect.
 DrawSemitransparentThumb  | Gets or sets a value indicating whether to draw semitransparent thumb.
 ThumbImage                | Gets or sets a specific image used to render the thumb.
 
-* Orientation               Gets or sets the orientation of the Slider(Horizontal or vertical)
-* DrawFocusRectangle        Gets or sets a value indicating whether to draw focus rectangle.
+Appearance | signification
+------------ | -------------
+Orientation               | Gets or sets the orientation of the Slider(Horizontal or vertical)
+DrawFocusRectangle        | Gets or sets a value indicating whether to draw focus rectangle.
+MouseEffects              | Gets or sets whether mouse entry and exit actions have impact on how control look.
 
-* MouseEffects              Gets or sets whether mouse entry and exit actions have impact on how control look.
-
-Values related topics | signification
+Values | signification
 ------------ | -------------
 Value                     | Gets or sets the value of Slider
 Minimum (0)               | Gets or sets the minimum value.
@@ -39,7 +40,7 @@ LargeChange               | Gets or sets trackbar's large change. It affects how
 MouseWheelBarPartitions   | Gets or sets the mouse wheel bar partitions.
 
 
-Colors related topics | signification
+Colors | signification
 ------------ | -------------
 ThumbOuterColor           | Gets or sets the thumb outer color.
 ThumbInnerColor           | Gets or sets the inner color of the thumb.
@@ -52,7 +53,7 @@ BarPenColorElapsedBottom  | Gets or sets the color of the bottom of the bar on t
 ElapsedInnerColor         | Gets or sets the inner color of the bar on the left of the thumb.
 
 
-Ticks related topics | signification
+Ticks | signification
 ------------ | -------------
 TickColor                 | Gets or sets the color of the graduations
 TickStyle                 | Gets or sets where to display the ticks (None, both top-left, bottom-right)
