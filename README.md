@@ -46,10 +46,10 @@ ThumbOuterColor           | Gets or sets the thumb outer color.
 ThumbInnerColor           | Gets or sets the inner color of the thumb.
 ThumbPenColor             | Gets or sets the color of the thumb pen.
 BarInnerColor             | Gets or sets the inner color of the bar.
-BarPenColorTop            | Gets or sets the color of the top of the bar
-BarPenColorBottom         | Gets or sets the color of the bottom of the bar
-BarPenColorElapsedTop     | Gets or sets the color of the top of the elapsed
-BarPenColorElapsedBottom  | Gets or sets the color of the bottom of the elapsed
+BarPenColorTop            | Gets or sets the top color of the bar
+BarPenColorBottom         | Gets or sets the bottom color of the bar
+ElapsedPenColorTop        | Gets or sets the top color the elapsed
+ElapsedPenColorBottom     | Gets or sets the bottom color of the elapsed
 ElapsedInnerColor         | Gets or sets the inner color of the elapsed.
 
 
