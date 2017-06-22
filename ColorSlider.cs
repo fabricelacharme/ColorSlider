@@ -73,7 +73,15 @@ namespace ColorSlider
 
         #endregion
 
+
         #region Properties
+
+        private Rectangle barRect; //bounding rectangle of bar area
+        private Rectangle barHalfRect;
+        private Rectangle thumbHalfRect;
+        private Rectangle elapsedRect; //bounding rectangle of elapsed area
+
+        #region thumb
 
         private Rectangle thumbRect; //bounding rectangle of thumb area
         /// <summary>
@@ -86,12 +94,8 @@ namespace ColorSlider
             get { return thumbRect; }
         }
 
-        private Rectangle barRect; //bounding rectangle of bar area
-        private Rectangle barHalfRect;
-        private Rectangle thumbHalfRect;
-        private Rectangle elapsedRect; //bounding rectangle of elapsed area
 
-        private int thumbSize = 16;
+        private int _thumbSize = 16;
 
         /// <summary>
         /// Gets or sets the size of the thumb.
@@ -103,12 +107,12 @@ namespace ColorSlider
         [DefaultValue(16)]
         public int ThumbSize
         {
-            get { return thumbSize; }
+            get { return _thumbSize; }
             set
             {                
                 if (value > 0 &
-                    value < (barOrientation == Orientation.Horizontal ? ClientRectangle.Width : ClientRectangle.Height))
-                    thumbSize = value;
+                    value < (_barOrientation == Orientation.Horizontal ? ClientRectangle.Width : ClientRectangle.Height))
+                    _thumbSize = value;
                 else
                     throw new ArgumentOutOfRangeException(
                         "TrackSize has to be greather than zero and lower than half of Slider width");                 
@@ -117,7 +121,7 @@ namespace ColorSlider
             }
         }
 
-        private GraphicsPath thumbCustomShape = null;
+        private GraphicsPath _thumbCustomShape = null;
         /// <summary>
         /// Gets or sets the thumb custom shape. Use ThumbRect property to determine bounding rectangle.
         /// </summary>
@@ -128,16 +132,16 @@ namespace ColorSlider
         [DefaultValue(typeof(GraphicsPath), "null")]
         public GraphicsPath ThumbCustomShape
         {
-            get { return thumbCustomShape; }
+            get { return _thumbCustomShape; }
             set
             {
-                thumbCustomShape = value;
-                thumbSize = (int) (barOrientation == Orientation.Horizontal ? value.GetBounds().Width : value.GetBounds().Height) + 1;
+                _thumbCustomShape = value;
+                _thumbSize = (int) (_barOrientation == Orientation.Horizontal ? value.GetBounds().Width : value.GetBounds().Height) + 1;
                 Invalidate();
             }
         }
 
-        private Size thumbRoundRectSize = new Size(16, 16);
+        private Size _thumbRoundRectSize = new Size(16, 16);
         /// <summary>
         /// Gets or sets the size of the thumb round rectangle edges.
         /// </summary>
@@ -147,18 +151,18 @@ namespace ColorSlider
         [DefaultValue(typeof(Size), "16; 16")]
         public Size ThumbRoundRectSize
         {
-            get { return thumbRoundRectSize; }
+            get { return _thumbRoundRectSize; }
             set
             {
                 int h = value.Height, w = value.Width;
                 if (h <= 0) h = 1;
                 if (w <= 0) w = 1;
-                thumbRoundRectSize = new Size(w, h);
+                _thumbRoundRectSize = new Size(w, h);
                 Invalidate();
             }
         }
 
-        private Size borderRoundRectSize = new Size(8, 8);
+        private Size _borderRoundRectSize = new Size(8, 8);
         /// <summary>
         /// Gets or sets the size of the border round rect.
         /// </summary>
@@ -168,18 +172,63 @@ namespace ColorSlider
         [DefaultValue(typeof(Size), "8; 8")]
         public Size BorderRoundRectSize
         {
-            get { return borderRoundRectSize; }
+            get { return _borderRoundRectSize; }
             set
             {
                 int h = value.Height, w = value.Width;
                 if (h <= 0) h = 1;
                 if (w <= 0) w = 1;
-                borderRoundRectSize = new Size(w, h);
+                _borderRoundRectSize = new Size(w, h);
                 Invalidate();
             }
         }
 
-        private Orientation barOrientation = Orientation.Horizontal;
+
+        private bool _drawSemitransparentThumb = true;
+        /// <summary>
+        /// Gets or sets a value indicating whether to draw semitransparent thumb.
+        /// </summary>
+        /// <value><c>true</c> if semitransparent thumb should be drawn; otherwise, <c>false</c>.</value>
+        [Description("Set whether to draw semitransparent thumb")]
+        [Category("ColorSlider")]
+        [DefaultValue(true)]
+        public bool DrawSemitransparentThumb
+        {
+            get { return _drawSemitransparentThumb; }
+            set
+            {
+                _drawSemitransparentThumb = value;
+                Invalidate();
+            }
+        }
+
+        private Image _thumbImage = null;
+        /// <summary>
+        /// Gets or sets the Image used to render the thumb.
+        /// </summary>
+        /// <value>the thumb Image</value> 
+        [Description("Set to use a specific Image for the thumb")]
+        [Category("ColorSlider")]
+        [DefaultValue(null)]
+        public Image ThumbImage
+        {
+            get { return _thumbImage; }
+            set
+            {
+                if (value != null)
+                    _thumbImage = value;
+                else
+                    _thumbImage = null;
+                Invalidate();
+            }
+        }
+
+        #endregion
+
+
+        #region Appearance
+
+        private Orientation _barOrientation = Orientation.Horizontal;
         /// <summary>
         /// Gets or sets the orientation of Slider.
         /// </summary>
@@ -189,29 +238,69 @@ namespace ColorSlider
         [DefaultValue(Orientation.Horizontal)]
         public Orientation Orientation
         {
-            get { return barOrientation; }
+            get { return _barOrientation; }
             set
             {
-                if (barOrientation != value)
+                if (_barOrientation != value)
                 {
-                    barOrientation = value;
+                    _barOrientation = value;
                     int temp = Width;
                     Width = Height;
                     Height = temp;
 
-                    if (thumbCustomShape != null)
-                        thumbSize =
+                    if (_thumbCustomShape != null)
+                        _thumbSize =
                             (int)
-                            (barOrientation == Orientation.Horizontal
-                                 ? thumbCustomShape.GetBounds().Width
-                                 : thumbCustomShape.GetBounds().Height) + 1;
+                            (_barOrientation == Orientation.Horizontal
+                                 ? _thumbCustomShape.GetBounds().Width
+                                 : _thumbCustomShape.GetBounds().Height) + 1;
                     Invalidate();
                 }
             }
         }
 
+        private bool _drawFocusRectangle = false;
+        /// <summary>
+        /// Gets or sets a value indicating whether to draw focus rectangle.
+        /// </summary>
+        /// <value><c>true</c> if focus rectangle should be drawn; otherwise, <c>false</c>.</value>
+        [Description("Set whether to draw focus rectangle")]
+        [Category("ColorSlider")]
+        [DefaultValue(false)]
+        public bool DrawFocusRectangle
+        {
+            get { return _drawFocusRectangle; }
+            set
+            {
+                _drawFocusRectangle = value;
+                Invalidate();
+            }
+        }
 
-        private int trackerValue = 30;
+        private bool _mouseEffects = true;
+        /// <summary>
+        /// Gets or sets whether mouse entry and exit actions have impact on how control look.
+        /// </summary>
+        /// <value><c>true</c> if mouse entry and exit actions have impact on how control look; otherwise, <c>false</c>.</value>
+        [Description("Set whether mouse entry and exit actions have impact on how control look")]
+        [Category("ColorSlider")]
+        [DefaultValue(true)]
+        public bool MouseEffects
+        {
+            get { return _mouseEffects; }
+            set
+            {
+                _mouseEffects = value;
+                Invalidate();
+            }
+        }
+
+        #endregion
+
+
+        #region values
+
+        private int _trackerValue = 30;
         /// <summary>
         /// Gets or sets the value of Slider.
         /// </summary>
@@ -222,12 +311,12 @@ namespace ColorSlider
         [DefaultValue(30)]
         public int Value
         {
-            get { return trackerValue; }
+            get { return _trackerValue; }
             set
             {
                 if (value >= _minimum & value <= _maximum)
                 {
-                    trackerValue = value;
+                    _trackerValue = value;
                     if (ValueChanged != null) ValueChanged(this, new EventArgs());
                     Invalidate();
                 }
@@ -253,9 +342,9 @@ namespace ColorSlider
                 if (value < _maximum)
                 {
                     _minimum = value;
-                    if (trackerValue < _minimum)
+                    if (_trackerValue < _minimum)
                     {
-                        trackerValue = _minimum;
+                        _trackerValue = _minimum;
                         if (ValueChanged != null) ValueChanged(this, new EventArgs());
                     }
                     Invalidate();
@@ -282,9 +371,9 @@ namespace ColorSlider
                 if (value > _minimum)
                 {
                     _maximum = value;
-                    if (trackerValue > _maximum)
+                    if (_trackerValue > _maximum)
                     {
-                        trackerValue = _maximum;
+                        _trackerValue = _maximum;
                         if (ValueChanged != null) ValueChanged(this, new EventArgs());
                     }
                     Invalidate();
@@ -293,7 +382,7 @@ namespace ColorSlider
             }
         }
 
-        private uint smallChange = 1;
+        private uint _smallChange = 1;
         /// <summary>
         /// Gets or sets trackbar's small change. It affects how to behave when directional keys are pressed
         /// </summary>
@@ -303,11 +392,11 @@ namespace ColorSlider
         [DefaultValue(1)]
         public uint SmallChange
         {
-            get { return smallChange; }
-            set { smallChange = value; }
+            get { return _smallChange; }
+            set { _smallChange = value; }
         }
 
-        private uint largeChange = 5;
+        private uint _largeChange = 5;
         /// <summary>
         /// Gets or sets trackbar's large change. It affects how to behave when PageUp/PageDown keys are pressed
         /// </summary>
@@ -317,65 +406,11 @@ namespace ColorSlider
         [DefaultValue(5)]
         public uint LargeChange
         {
-            get { return largeChange; }
-            set { largeChange = value; }
+            get { return _largeChange; }
+            set { _largeChange = value; }
         }
-
-        private bool drawFocusRectangle = false;
-        /// <summary>
-        /// Gets or sets a value indicating whether to draw focus rectangle.
-        /// </summary>
-        /// <value><c>true</c> if focus rectangle should be drawn; otherwise, <c>false</c>.</value>
-        [Description("Set whether to draw focus rectangle")]
-        [Category("ColorSlider")]
-        [DefaultValue(false)]
-        public bool DrawFocusRectangle
-        {
-            get { return drawFocusRectangle; }
-            set
-            {
-                drawFocusRectangle = value;
-                Invalidate();
-            }
-        }
-
-        private bool drawSemitransparentThumb = true;
-        /// <summary>
-        /// Gets or sets a value indicating whether to draw semitransparent thumb.
-        /// </summary>
-        /// <value><c>true</c> if semitransparent thumb should be drawn; otherwise, <c>false</c>.</value>
-        [Description("Set whether to draw semitransparent thumb")]
-        [Category("ColorSlider")]
-        [DefaultValue(true)]
-        public bool DrawSemitransparentThumb
-        {
-            get { return drawSemitransparentThumb; }
-            set
-            {
-                drawSemitransparentThumb = value;
-                Invalidate();
-            }
-        }
-
-        private bool mouseEffects = true;
-        /// <summary>
-        /// Gets or sets whether mouse entry and exit actions have impact on how control look.
-        /// </summary>
-        /// <value><c>true</c> if mouse entry and exit actions have impact on how control look; otherwise, <c>false</c>.</value>
-        [Description("Set whether mouse entry and exit actions have impact on how control look")]
-        [Category("ColorSlider")]
-        [DefaultValue(true)]
-        public bool MouseEffects
-        {
-            get { return mouseEffects; }
-            set
-            {
-                mouseEffects = value;
-                Invalidate();
-            }
-        }
-
-        private int mouseWheelBarPartitions = 10;
+           
+        private int _mouseWheelBarPartitions = 10;
         /// <summary>
         /// Gets or sets the mouse wheel bar partitions.
         /// </summary>
@@ -386,60 +421,41 @@ namespace ColorSlider
         [DefaultValue(10)]
         public int MouseWheelBarPartitions
         {
-            get { return mouseWheelBarPartitions; }
+            get { return _mouseWheelBarPartitions; }
             set
             {
                 if (value > 0)
-                    mouseWheelBarPartitions = value;
+                    _mouseWheelBarPartitions = value;
                 else throw new ArgumentOutOfRangeException("MouseWheelBarPartitions has to be greather than zero");
             }
         }
 
+        #endregion
 
-        private Image thumbImage = null;
-        /// <summary>
-        /// Gets or sets the Image use to render the thumb.
-        /// </summary>
-        /// <value>the thumb Image</value> 
-        [Description("Set to use a specific Image for the thumb")]
-        [Category("ColorSlider")]
-        [DefaultValue(null)]
-        public Image ThumbImage
-        {
-            get { return thumbImage; }
-            set
-            {
-                if (value != null)                
-                    thumbImage = value;                
-                else
-                    thumbImage = null;
-                Invalidate();
-            }
-        }
 
 
         #region colors
 
-        private Color thumbOuterColor = Color.White;
+        private Color _thumbOuterColor = Color.White;
         /// <summary>
-        /// Gets or sets the thumb outer color .
+        /// Gets or sets the thumb outer color.
         /// </summary>
         /// <value>The thumb outer color.</value>
-        [Description("Set Slider thumb outer color")]
+        [Description("Sets Slider thumb outer color")]
         [Category("ColorSlider")]
         [DefaultValue(typeof(Color), "White")]
         public Color ThumbOuterColor
         {
-            get { return thumbOuterColor; }
+            get { return _thumbOuterColor; }
             set
             {
-                thumbOuterColor = value;
+                _thumbOuterColor = value;
                 Invalidate();
             }
         }
 
 
-        private Color thumbInnerColor = Color.FromArgb(21, 56, 152);
+        private Color _thumbInnerColor = Color.FromArgb(21, 56, 152);
         /// <summary>
         /// Gets or sets the inner color of the thumb.
         /// </summary>
@@ -448,16 +464,16 @@ namespace ColorSlider
         [Category("ColorSlider")]        
         public Color ThumbInnerColor
         {
-            get { return thumbInnerColor; }
+            get { return _thumbInnerColor; }
             set
             {
-                thumbInnerColor = value;
+                _thumbInnerColor = value;
                 Invalidate();
             }
         }
 
 
-        private Color thumbPenColor = Color.FromArgb(21, 56, 152);
+        private Color _thumbPenColor = Color.FromArgb(21, 56, 152);
         /// <summary>
         /// Gets or sets the color of the thumb pen.
         /// </summary>
@@ -466,16 +482,16 @@ namespace ColorSlider
         [Category("ColorSlider")]       
         public Color ThumbPenColor
         {
-            get { return thumbPenColor; }
+            get { return _thumbPenColor; }
             set
             {
-                thumbPenColor = value;
+                _thumbPenColor = value;
                 Invalidate();
             }
         }
 
     
-        private Color barInnerColor = Color.Black;
+        private Color _barInnerColor = Color.Black;
         /// <summary>
         /// Gets or sets the inner color of the bar.
         /// </summary>
@@ -485,66 +501,82 @@ namespace ColorSlider
         [DefaultValue(typeof(Color), "Black")]
         public Color BarInnerColor
         {
-            get { return barInnerColor; }
+            get { return _barInnerColor; }
             set
             {
-                barInnerColor = value;
+                _barInnerColor = value;
                 Invalidate();
             }
         }
        
 
-        private Color barPenColorElapsedTop = Color.FromArgb(95, 140, 180);   // bleu clair
+        private Color _elapsedPenColorTop = Color.FromArgb(95, 140, 180);   // bleu clair
+        /// <summary>
+        /// Gets or sets the top color of the Elapsed
+        /// </summary>
+        [Description("Gets or sets the top color of the elapsed")]
         [Category("ColorSlider")]
-        public Color BarPenColorElapsedTop
+        public Color ElapsedPenColorTop 
         {
-            get { return barPenColorElapsedTop; }
+            get { return _elapsedPenColorTop; }
             set
             {
-                barPenColorElapsedTop = value;
+                _elapsedPenColorTop = value;
                 Invalidate();
             }
         }
 
 
-        private Color barPenColorElapsedBottom = Color.FromArgb(99, 130, 208);   // bleu très clair
+        private Color _elapsedPenColorBottom = Color.FromArgb(99, 130, 208);   // bleu très clair
+        /// <summary>
+        /// Gets or sets the bottom color of the elapsed
+        /// </summary>
+        [Description("Gets or sets the bottom color of the elapsed")]
         [Category("ColorSlider")]
-        public Color BarPenColorElapsedBottom
+        public Color ElapsedPenColorBottom 
         {
-            get { return barPenColorElapsedBottom; }
+            get { return _elapsedPenColorBottom; }
             set
             {
-                barPenColorElapsedBottom = value;
+                _elapsedPenColorBottom = value;
                 Invalidate();
             }
         }
 
 
-        private Color barPenColorRemainTop = Color.FromArgb(55, 60, 74);     // gris foncé
+        private Color _barPenColorTop = Color.FromArgb(55, 60, 74);     // gris foncé
+        /// <summary>
+        /// Gets or sets the top color of the bar
+        /// </summary>
+        [Description("Gets or sets the top color of the bar")]
         [Category("ColorSlider")]
         public Color BarPenColorTop
         {
-            get { return barPenColorRemainTop; }
+            get { return _barPenColorTop; }
             set
             {
-                barPenColorRemainTop = value;
+                _barPenColorTop = value;
                 Invalidate();
             }
         }
 
-        private Color barPenColorRemainBottom = Color.FromArgb(87, 94, 110);    // gris moyen
+        private Color _barPenColorBottom = Color.FromArgb(87, 94, 110);    // gris moyen
+        /// <summary>
+        /// Gets or sets the bottom color of bar
+        /// </summary>
+        [Description("Gets or sets the bottom color of the bar")]
         [Category("ColorSlider")]
         public Color BarPenColorBottom
         {
-            get { return barPenColorRemainBottom; }
+            get { return _barPenColorBottom; }
             set
             {
-                barPenColorRemainBottom = value;
+                _barPenColorBottom = value;
                 Invalidate();
             }
         }   
 
-        private Color elapsedInnerColor = Color.FromArgb(21, 56, 152);
+        private Color _elapsedInnerColor = Color.FromArgb(21, 56, 152);
         /// <summary>
         /// Gets or sets the inner color of the elapsed.
         /// </summary>
@@ -553,29 +585,29 @@ namespace ColorSlider
         [Category("ColorSlider")]        
         public Color ElapsedInnerColor
         {
-            get { return elapsedInnerColor; }
+            get { return _elapsedInnerColor; }
             set
             {
-                elapsedInnerColor = value;
+                _elapsedInnerColor = value;
                 Invalidate();
             }
         }
 
      
         /// <summary>
-        /// Color of graduations
+        /// Gets or sets the color of the graduations
         /// </summary>
         [Description("Color of graduations")]
         [Category("ColorSlider")]    
-        private Color tickColor = Color.White;
+        private Color _tickColor = Color.White;
         public Color TickColor
         {
-            get { return tickColor; }
+            get { return _tickColor; }
             set
             {
-                if (value != tickColor)
+                if (value != _tickColor)
                 {
-                    tickColor = value;
+                    _tickColor = value;
                     Invalidate();
                 }
             }
@@ -586,7 +618,7 @@ namespace ColorSlider
 
         #region divisions
 
-        private TickStyle tickStyle = TickStyle.TopLeft;
+        private TickStyle _tickStyle = TickStyle.TopLeft;
         /// <summary>
         /// Gets or sets where to display the ticks (None, both top-left, bottom-right)
         /// </summary>
@@ -595,9 +627,9 @@ namespace ColorSlider
         [DefaultValue(TickStyle.TopLeft)]
         public TickStyle TickStyle
         {
-            get { return tickStyle; }
+            get { return _tickStyle; }
             set {
-                tickStyle = value;
+                _tickStyle = value;
                 Invalidate();
             }
         }
@@ -697,6 +729,7 @@ namespace ColorSlider
 
         #endregion
 
+
         #region Color schemas
 
         //define own color schemas
@@ -774,19 +807,19 @@ namespace ColorSlider
             {
                 colorSchema = value;
                 byte sn = (byte)value;
-                thumbOuterColor = aColorSchema[sn, 0];
-                thumbInnerColor = aColorSchema[sn, 1];
-                thumbPenColor = aColorSchema[sn, 2];
+                _thumbOuterColor = aColorSchema[sn, 0];
+                _thumbInnerColor = aColorSchema[sn, 1];
+                _thumbPenColor = aColorSchema[sn, 2];
                 
-                barInnerColor = aColorSchema[sn, 3];
+                _barInnerColor = aColorSchema[sn, 3];
 
-                barPenColorElapsedTop = aColorSchema[sn, 4];
-                barPenColorElapsedBottom = aColorSchema[sn, 5];
+                _elapsedPenColorTop = aColorSchema[sn, 4];
+                _elapsedPenColorBottom = aColorSchema[sn, 5];
 
-                barPenColorRemainTop = aColorSchema[sn, 6];
-                barPenColorRemainBottom = aColorSchema[sn, 7];
+                _barPenColorTop = aColorSchema[sn, 6];
+                _barPenColorBottom = aColorSchema[sn, 7];
 
-                elapsedInnerColor = aColorSchema[sn, 8];
+                _elapsedInnerColor = aColorSchema[sn, 8];
 
                 Invalidate();
             }
@@ -794,6 +827,7 @@ namespace ColorSlider
 
         #endregion
         
+
         #region Constructors
 
         /// <summary>
@@ -837,11 +871,11 @@ namespace ColorSlider
         {
             if (!Enabled)
             {
-                Color[] desaturatedColors = DesaturateColors(thumbOuterColor, thumbInnerColor, thumbPenColor,
-                                                             barInnerColor, 
-                                                             barPenColorElapsedTop, barPenColorElapsedBottom, 
-                                                             barPenColorRemainTop, barPenColorRemainBottom,
-                                                             elapsedInnerColor);
+                Color[] desaturatedColors = DesaturateColors(_thumbOuterColor, _thumbInnerColor, _thumbPenColor,
+                                                             _barInnerColor, 
+                                                             _elapsedPenColorTop, _elapsedPenColorBottom, 
+                                                             _barPenColorTop, _barPenColorBottom,
+                                                             _elapsedInnerColor);
                 DrawColorSlider(e, 
                                     desaturatedColors[0], desaturatedColors[1], desaturatedColors[2], 
                                     desaturatedColors[3], 
@@ -851,13 +885,13 @@ namespace ColorSlider
             }
             else
             {
-                if (mouseEffects && mouseInRegion)
+                if (_mouseEffects && mouseInRegion)
                 {
-                    Color[] lightenedColors = LightenColors(thumbOuterColor, thumbInnerColor, thumbPenColor,
-                                                            barInnerColor,
-                                                            barPenColorElapsedTop, barPenColorElapsedBottom, 
-                                                            barPenColorRemainTop, barPenColorRemainBottom,
-                                                            elapsedInnerColor);
+                    Color[] lightenedColors = LightenColors(_thumbOuterColor, _thumbInnerColor, _thumbPenColor,
+                                                            _barInnerColor,
+                                                            _elapsedPenColorTop, _elapsedPenColorBottom, 
+                                                            _barPenColorTop, _barPenColorBottom,
+                                                            _elapsedInnerColor);
                     DrawColorSlider(e, 
                         lightenedColors[0], lightenedColors[1], lightenedColors[2], 
                         lightenedColors[3], 
@@ -868,11 +902,11 @@ namespace ColorSlider
                 else
                 {
                     DrawColorSlider(e, 
-                                    thumbOuterColor, thumbInnerColor, thumbPenColor,
-                                    barInnerColor,
-                                    barPenColorElapsedTop, barPenColorElapsedBottom, 
-                                    barPenColorRemainTop, barPenColorRemainBottom,
-                                    elapsedInnerColor);
+                                    _thumbOuterColor, _thumbInnerColor, _thumbPenColor,
+                                    _barInnerColor,
+                                    _elapsedPenColorTop, _elapsedPenColorBottom, 
+                                    _barPenColorTop, _barPenColorBottom,
+                                    _elapsedInnerColor);
                 }
             }
         }
@@ -897,33 +931,33 @@ namespace ColorSlider
             try
             {
                 //set up thumbRect aproprietly
-                if (barOrientation == Orientation.Horizontal)
+                if (_barOrientation == Orientation.Horizontal)
                 {
                     #region horizontal
-                    if (thumbImage != null)
+                    if (_thumbImage != null)
                     {
-                        int TrackX = (((trackerValue - _minimum) * (ClientRectangle.Width - thumbImage.Width)) / (_maximum - _minimum));
-                        thumbRect = new Rectangle(TrackX, ClientRectangle.Height/2 - thumbImage.Height/2, thumbImage.Width, thumbImage.Height);
+                        int TrackX = (((_trackerValue - _minimum) * (ClientRectangle.Width - _thumbImage.Width)) / (_maximum - _minimum));
+                        thumbRect = new Rectangle(TrackX, ClientRectangle.Height/2 - _thumbImage.Height/2, _thumbImage.Width, _thumbImage.Height);
                     }
                     else
                     {
-                        int TrackX = (((trackerValue - _minimum) * (ClientRectangle.Width - thumbSize)) / (_maximum - _minimum));
-                        thumbRect = new Rectangle(TrackX, 1, thumbSize - 1, ClientRectangle.Height - 3);
+                        int TrackX = (((_trackerValue - _minimum) * (ClientRectangle.Width - _thumbSize)) / (_maximum - _minimum));
+                        thumbRect = new Rectangle(TrackX, 1, _thumbSize - 1, ClientRectangle.Height - 3);
                     }
                     #endregion
                 }
                 else
                 {
                     #region vertical
-                    if (thumbImage != null)
+                    if (_thumbImage != null)
                     {
-                        int TrackY = (((_maximum - (trackerValue - _minimum)) * (ClientRectangle.Height - thumbImage.Height)) / (_maximum - _minimum));
-                        thumbRect = new Rectangle(ClientRectangle.Width/2 - thumbImage.Width/2, TrackY, thumbImage.Width, thumbImage.Height);
+                        int TrackY = (((_maximum - (_trackerValue - _minimum)) * (ClientRectangle.Height - _thumbImage.Height)) / (_maximum - _minimum));
+                        thumbRect = new Rectangle(ClientRectangle.Width/2 - _thumbImage.Width/2, TrackY, _thumbImage.Width, _thumbImage.Height);
                     }
                     else
                     {
-                        int TrackY = (((_maximum - (trackerValue - _minimum)) * (ClientRectangle.Height - thumbSize)) / (_maximum - _minimum));
-                        thumbRect = new Rectangle(1, TrackY, ClientRectangle.Width - 3, thumbSize - 1);
+                        int TrackY = (((_maximum - (_trackerValue - _minimum)) * (ClientRectangle.Height - _thumbSize)) / (_maximum - _minimum));
+                        thumbRect = new Rectangle(1, TrackY, ClientRectangle.Width - 3, _thumbSize - 1);
                     }
                     #endregion
                 }
@@ -936,7 +970,7 @@ namespace ColorSlider
                 LinearGradientMode gradientOrientation;
 
 
-                if (barOrientation == Orientation.Horizontal)
+                if (_barOrientation == Orientation.Horizontal)
                 {
                     #region horizontal
                     barRect.Inflate(-1, -barRect.Height / 3);
@@ -948,7 +982,7 @@ namespace ColorSlider
 
                     thumbHalfRect.Height /= 2;
                     elapsedRect = barRect;
-                    elapsedRect.Width = thumbRect.Left + thumbSize / 2;
+                    elapsedRect.Width = thumbRect.Left + _thumbSize / 2;
                     #endregion
                 }
                 else
@@ -974,11 +1008,11 @@ namespace ColorSlider
                 
                 //get thumb shape path 
                 GraphicsPath thumbPath;
-                if (thumbCustomShape == null)
-                    thumbPath = CreateRoundRectPath(thumbRect, thumbRoundRectSize);
+                if (_thumbCustomShape == null)
+                    thumbPath = CreateRoundRectPath(thumbRect, _thumbRoundRectSize);
                 else
                 {
-                    thumbPath = thumbCustomShape;
+                    thumbPath = _thumbCustomShape;
                     Matrix m = new Matrix();
                     m.Translate(thumbRect.Left - thumbPath.GetBounds().Left, thumbRect.Top - thumbPath.GetBounds().Top);
                     thumbPath.Transform(m);
@@ -990,7 +1024,7 @@ namespace ColorSlider
                 #region draw inner bar
                 // INNER : FAB: draw a single line instead 
                 // Dessine une ligne noire sur toute la largeur du controle (elapsed + rest)
-                if (barOrientation == Orientation.Horizontal)
+                if (_barOrientation == Orientation.Horizontal)
                 {
                     e.Graphics.DrawLine(new Pen(barInnerColorPaint, 1f), barRect.X, barRect.Y + barRect.Height/2, barRect.X + barRect.Width, barRect.Y + barRect.Height / 2);
                 }
@@ -1007,7 +1041,7 @@ namespace ColorSlider
 
 
                 // FAB: replace by single line
-                if (barOrientation == Orientation.Horizontal)
+                if (_barOrientation == Orientation.Horizontal)
                 {
                     e.Graphics.DrawLine(new Pen(elapsedInnerColorPaint, 1f), barRect.X, barRect.Y + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y + barRect.Height / 2);
                 }
@@ -1024,7 +1058,7 @@ namespace ColorSlider
                 //draw external bar band                    
                 // -----------------------------------
                    
-                if (barOrientation == Orientation.Horizontal)
+                if (_barOrientation == Orientation.Horizontal)
                 {
                     #region horizontal
                     // Elapsed top
@@ -1080,14 +1114,14 @@ namespace ColorSlider
                 #region draw thumb
                 //draw thumb
                 Color newthumbOuterColorPaint = thumbOuterColorPaint, newthumbInnerColorPaint = thumbInnerColorPaint;
-                if (Capture && drawSemitransparentThumb)
+                if (Capture && _drawSemitransparentThumb)
                 {
                     newthumbOuterColorPaint = Color.FromArgb(175, thumbOuterColorPaint);
                     newthumbInnerColorPaint = Color.FromArgb(175, thumbInnerColorPaint);
                 }
 
                 LinearGradientBrush lgbThumb;
-                if (barOrientation == Orientation.Horizontal)
+                if (_barOrientation == Orientation.Horizontal)
                 {
                     lgbThumb = new LinearGradientBrush(thumbRect, newthumbOuterColorPaint, newthumbInnerColorPaint, gradientOrientation);
                 }
@@ -1105,14 +1139,14 @@ namespace ColorSlider
                     //draw thumb band
                     Color newThumbPenColor = thumbPenColorPaint;
 
-                    if (mouseEffects && (Capture || mouseInThumbRegion))
+                    if (_mouseEffects && (Capture || mouseInThumbRegion))
                         newThumbPenColor = ControlPaint.Dark(newThumbPenColor);
                     using (Pen thumbPen = new Pen(newThumbPenColor))
                     {
 
-                        if (thumbImage != null)
+                        if (_thumbImage != null)
                         {
-                            Bitmap bmp = new Bitmap(thumbImage);
+                            Bitmap bmp = new Bitmap(_thumbImage);
                             bmp.MakeTransparent(Color.FromArgb(255, 0, 255));
                             Rectangle srceRect = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
@@ -1132,7 +1166,7 @@ namespace ColorSlider
 
                 #region draw focusing rectangle
                 //draw focusing rectangle
-                if (Focused & drawFocusRectangle)
+                if (Focused & _drawFocusRectangle)
                     using (Pen p = new Pen(Color.FromArgb(200, barPenColorPaintElapsedTop)))
                     {
                         p.DashStyle = DashStyle.Dot;
@@ -1141,7 +1175,7 @@ namespace ColorSlider
                         r.Height--;
                         r.X++;
                                                
-                        using (GraphicsPath gpBorder = CreateRoundRectPath(r, borderRoundRectSize))
+                        using (GraphicsPath gpBorder = CreateRoundRectPath(r, _borderRoundRectSize))
                         {
                             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
                             e.Graphics.DrawPath(p, gpBorder);
@@ -1151,7 +1185,7 @@ namespace ColorSlider
 
 
                 #region draw ticks
-                if (tickStyle != TickStyle.None)
+                if (_tickStyle != TickStyle.None)
                 {
                     int x1, x2, y1, y2 = 0;
                     int nbticks = 1 +  _scaleDivisions * (_scaleSubDivisions + 1);                    
@@ -1160,7 +1194,7 @@ namespace ColorSlider
                     int W = 0;
                     float rulerValue = 0;
 
-                    if (barOrientation == Orientation.Horizontal)
+                    if (_barOrientation == Orientation.Horizontal)
                     {
                         start = thumbRect.Width / 2;
                         W = barRect.Width - thumbRect.Width;
@@ -1176,8 +1210,8 @@ namespace ColorSlider
                     float incr = W / (nbticks - 1);
 
                     // pen for ticks
-                    Pen penTickL = new Pen(tickColor, 1f);
-                    Pen penTickS = new Pen(tickColor, 1f);
+                    Pen penTickL = new Pen(_tickColor, 1f);
+                    Pen penTickS = new Pen(_tickColor, 1f);
                     int idx = 0;
                     int scaleL = 5;
                     int scaleS = 3;
@@ -1212,20 +1246,20 @@ namespace ColorSlider
                         SizeF size = e.Graphics.MeasureString( str, font );                       
 
                         // HORIZONTAL
-                        if (barOrientation == Orientation.Horizontal)
+                        if (_barOrientation == Orientation.Horizontal)
                         {
                             #region horizontal
 
                             // Draw string graduations
                             if (_showDivisionsText)
                             {
-                                if (tickStyle == TickStyle.TopLeft || tickStyle == TickStyle.Both)
+                                if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                                 {
                                     tx = (start + barRect.X + interval) - (float)(size.Width * 0.5);
                                     ty = ClientRectangle.Y;
                                     e.Graphics.DrawString(str, font, br, tx, ty);
                                 }
-                                if (tickStyle == TickStyle.BottomRight || tickStyle == TickStyle.Both)
+                                if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
                                 {
                                     tx = (start + barRect.X + interval) - (float)(size.Width * 0.5);
                                     ty = ClientRectangle.Y + ClientRectangle.Height - (size.Height) + 3;                                    
@@ -1238,7 +1272,7 @@ namespace ColorSlider
                             
 
                             // draw ticks                           
-                            if (tickStyle == TickStyle.TopLeft || tickStyle == TickStyle.Both)
+                            if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                             {                                 
                                 x1 = start + barRect.X + interval;
                                 y1 = ClientRectangle.Y + startDiv;
@@ -1246,7 +1280,7 @@ namespace ColorSlider
                                 y2 = ClientRectangle.Y + startDiv + scaleL;
                                 e.Graphics.DrawLine(penTickL, x1, y1, x2, y2);
                             }
-                            if (tickStyle == TickStyle.BottomRight || tickStyle == TickStyle.Both)
+                            if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
                             {
 
                                 x1 = start + barRect.X + interval;
@@ -1271,7 +1305,7 @@ namespace ColorSlider
                                     if (_showSmallScale)
                                     {
                                         // Horizontal                            
-                                        if (tickStyle == TickStyle.TopLeft || tickStyle == TickStyle.Both)
+                                        if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                                         {
                                             x1 = start + barRect.X + interval;
                                             y1 = ClientRectangle.Y + startDiv;
@@ -1279,7 +1313,7 @@ namespace ColorSlider
                                             y2 = ClientRectangle.Y + startDiv + scaleS;
                                             e.Graphics.DrawLine(penTickS, x1, y1, x2, y2);
                                         }
-                                        if (tickStyle == TickStyle.BottomRight || tickStyle == TickStyle.Both)
+                                        if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
                                         {
                                             x1 = start + barRect.X + interval;
                                             y1 = ClientRectangle.Y + ClientRectangle.Height - startDiv;
@@ -1300,13 +1334,13 @@ namespace ColorSlider
                             // Draw string graduations
                             if (_showDivisionsText)
                             {                                
-                                if (tickStyle == TickStyle.TopLeft || tickStyle == TickStyle.Both)
+                                if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                                 {                                    
                                     tx = lineLeftX - size.Width / 2;
                                     ty = start + barRect.Y + interval - (float)(size.Height * 0.5);
                                     e.Graphics.DrawString(str, font, br, tx, ty);
                                 }
-                                if (tickStyle == TickStyle.BottomRight || tickStyle == TickStyle.Both)
+                                if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
                                 {                                    
                                     tx = lineRightX - size.Width / 2;
                                     ty = start + barRect.Y + interval - (float)(size.Height * 0.5);
@@ -1318,7 +1352,7 @@ namespace ColorSlider
                             
 
                             // draw ticks                            
-                            if (tickStyle == TickStyle.TopLeft || tickStyle == TickStyle.Both)
+                            if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                             {
                                 x1 = ClientRectangle.X + startDiv;
                                 y1 = start + barRect.Y + interval;
@@ -1326,7 +1360,7 @@ namespace ColorSlider
                                 y2 = start + barRect.Y + interval;
                                 e.Graphics.DrawLine(penTickL, x1, y1, x2, y2);
                             }
-                            if (tickStyle == TickStyle.BottomRight || tickStyle == TickStyle.Both)
+                            if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
                             {
                                 x1 = ClientRectangle.X + ClientRectangle.Width - startDiv;
                                 y1 = start + barRect.Y + interval;
@@ -1347,7 +1381,7 @@ namespace ColorSlider
 
                                     if (_showSmallScale)
                                     {
-                                        if (tickStyle == TickStyle.TopLeft || tickStyle == TickStyle.Both)
+                                        if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                                         {
                                             x1 = ClientRectangle.X + startDiv;
                                             y1 = start + barRect.Y + interval;
@@ -1355,7 +1389,7 @@ namespace ColorSlider
                                             y2 = start + barRect.Y + interval;
                                             e.Graphics.DrawLine(penTickS, x1, y1, x2, y2);
                                         }
-                                        if (tickStyle == TickStyle.BottomRight || tickStyle == TickStyle.Both)
+                                        if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
                                         {
                                             x1 = ClientRectangle.X + ClientRectangle.Width - startDiv;
                                             y1 = start + barRect.Y + interval;
@@ -1435,7 +1469,7 @@ namespace ColorSlider
             if (e.Button == MouseButtons.Left)
             {
                 Capture = true;
-                if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.ThumbTrack, trackerValue));
+                if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.ThumbTrack, _trackerValue));
                 if (ValueChanged != null) ValueChanged(this, new EventArgs());
                 OnMouseMove(e);
             }
@@ -1455,29 +1489,29 @@ namespace ColorSlider
             {
                 ScrollEventType set = ScrollEventType.ThumbPosition;
                 Point pt = e.Location;
-                int p = barOrientation == Orientation.Horizontal ? pt.X : pt.Y;
-                int margin = thumbSize >> 1;
+                int p = _barOrientation == Orientation.Horizontal ? pt.X : pt.Y;
+                int margin = _thumbSize >> 1;
                 p -= margin;
                 float coef = (float)(_maximum - _minimum) /
                              (float)
-                             ((barOrientation == Orientation.Horizontal ? ClientSize.Width : ClientSize.Height) - 2 * margin);
+                             ((_barOrientation == Orientation.Horizontal ? ClientSize.Width : ClientSize.Height) - 2 * margin);
 
                               
-                trackerValue = barOrientation == Orientation.Horizontal ? (int)(p * coef + _minimum) : (_maximum - (int)(p * coef + _minimum));
+                _trackerValue = _barOrientation == Orientation.Horizontal ? (int)(p * coef + _minimum) : (_maximum - (int)(p * coef + _minimum));
 
 
-                if (trackerValue <= _minimum)
+                if (_trackerValue <= _minimum)
                 {
-                    trackerValue = _minimum;
+                    _trackerValue = _minimum;
                     set = ScrollEventType.First;
                 }
-                else if (trackerValue >= _maximum)
+                else if (_trackerValue >= _maximum)
                 {
-                    trackerValue = _maximum;
+                    _trackerValue = _maximum;
                     set = ScrollEventType.Last;
                 }
 
-                if (Scroll != null) Scroll(this, new ScrollEventArgs(set, trackerValue));
+                if (Scroll != null) Scroll(this, new ScrollEventArgs(set, _trackerValue));
                 if (ValueChanged != null) ValueChanged(this, new EventArgs());
             }
             Invalidate();
@@ -1492,7 +1526,7 @@ namespace ColorSlider
             base.OnMouseUp(e);
             Capture = false;
             mouseInThumbRegion = IsPointInRect(e.Location, thumbRect);
-            if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.EndScroll, trackerValue));
+            if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.EndScroll, _trackerValue));
             if (ValueChanged != null) ValueChanged(this, new EventArgs());
             Invalidate();
         }
@@ -1504,7 +1538,7 @@ namespace ColorSlider
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
-            int v = e.Delta / 120 * (_maximum - _minimum) / mouseWheelBarPartitions;
+            int v = e.Delta / 120 * (_maximum - _minimum) / _mouseWheelBarPartitions;
             SetProperValue(Value + v);
 
             // FAB: 11/04/17 - avoid to send MouseWheel event to the parent container
@@ -1542,12 +1576,12 @@ namespace ColorSlider
             {
                 case Keys.Down:
                 case Keys.Left:
-                    SetProperValue(Value - (int)smallChange);
+                    SetProperValue(Value - (int)_smallChange);
                     if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.SmallDecrement, Value));
                     break;
                 case Keys.Up:
                 case Keys.Right:
-                    SetProperValue(Value + (int)smallChange);
+                    SetProperValue(Value + (int)_smallChange);
                     if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.SmallIncrement, Value));
                     break;
                 case Keys.Home:
@@ -1557,11 +1591,11 @@ namespace ColorSlider
                     Value = _maximum;
                     break;
                 case Keys.PageDown:
-                    SetProperValue(Value - (int)largeChange);
+                    SetProperValue(Value - (int)_largeChange);
                     if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.LargeDecrement, Value));
                     break;
                 case Keys.PageUp:
-                    SetProperValue(Value + (int)largeChange);
+                    SetProperValue(Value + (int)_largeChange);
                     if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.LargeIncrement, Value));
                     break;
             }
