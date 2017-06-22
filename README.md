@@ -44,11 +44,9 @@ Colors related topics | signification
 ThumbOuterColor           | Gets or sets the thumb outer color.
 ThumbInnerColor           | Gets or sets the inner color of the thumb.
 ThumbPenColor             | Gets or sets the color of the thumb pen.
-
 BarInnerColor             | Gets or sets the inner color of the bar.
 BarPenColorTop            | Gets or sets the color of the top of the bar on the right of the thumb
 BarPenColorBottom         | Gets or sets the color of the bottom of the bar on the right of the thumb
-
 BarPenColorElapsedTop     | Gets or sets the color of the top of the bar on the left of the thumb
 BarPenColorElapsedBottom  | Gets or sets the color of the bottom of the bar on the left of the thumb
 ElapsedInnerColor         | Gets or sets the inner color of the bar on the left of the thumb.
