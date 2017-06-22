@@ -3,7 +3,7 @@ A slider control in C#
 
 ![GitHub Logo](/gifs/colorslider.jpg)
 
-ColorSlider is a trackbar control written in C# as a replacement of the standard trackbar proposed by Microsoft in Visual Studio
+ColorSlider is a trackbar control written in C# as a replacement of the standard trackbar proposed by Microsoft in Visual Studio.
 It is a free interpretation of the original code from Michal Brylka published in the site Code Project.
 see https://www.codeproject.com/Articles/17395/Owner-drawn-trackbar-slider
 
