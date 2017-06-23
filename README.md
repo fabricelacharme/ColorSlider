@@ -64,10 +64,11 @@ The ticks and texts are drawn in two nested loops
 * a first loop from 0 to ScaleDividion for the main graduations and texts
 * a nested loop from 0 to ScaleSubDivision for the subdivisions
 
-The offset between each tick is a multiple of W/(nbticks -1)
+The offset between each tick is a multiple of W/(nbticks -1) where:
 * W is the width of the bar minus the width of the thumb, in order that when the thumb is at minimum position or maximum position, the graduation coincide with the middle of the thumb
 * nbticks is the number of graduations including subdivisions: nbticks = 1 +  _scaleDivisions * (_scaleSubDivisions + 1);
 
+So, as you see, nothing very difficult in this control. You just have to draw lines and calculate precisely where they start and where they end...  
 
 # Properties
 
