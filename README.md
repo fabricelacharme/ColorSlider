@@ -33,12 +33,24 @@ Typical usage of ValueChanged event:
 
 Thumb | signification
 ------------ | -------------
+**Thumb**                 | ?
 ThumbSize                 | The size of the thumb (Width, Height). allowing you to make circles or rectangles
 ThumbCustomShape          | Gets or sets the thumb custom shape. Use ThumbRect property to determine bounding rectangle.
 ThumbRoundRectSize        | Gets or sets the size of the thumb round rectangle edges.
 BorderRoundRectSize       | Gets or sets the size of the border round rect.
 DrawSemitransparentThumb  | Gets or sets a value indicating whether to draw semitransparent thumb.
 ThumbImage                | Gets or sets a specific image used to render the thumb.
+**Appearance**            | ?
+Orientation               | Gets or sets the orientation of the Slider(Horizontal or vertical)
+DrawFocusRectangle        | Gets or sets a value indicating whether to draw focus rectangle.
+MouseEffects              | Gets or sets whether mouse entry and exit actions have impact on how control look.
+**Values**                | ?
+Value                     | Gets or sets the value of Slider
+Minimum (0)               | Gets or sets the minimum value.
+Maximum (100)             | Gets or sets the maximum value.
+SmallChange               | Gets or sets trackbar's small change. It affects how to behave when directional keys are pressed.
+LargeChange               | Gets or sets trackbar's large change. It affects how to behave when PageUp/PageDown keys are pressed.
+MouseWheelBarPartitions   | Gets or sets the mouse wheel bar partitions.
 
 
 Appearance | signification
