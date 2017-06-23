@@ -3,14 +3,18 @@ A slider/trackbar control in C#
 
 ![GitHub Logo](/gifs/colorslider.jpg)
 
-ColorSlider is a trackbar control written in C# as an alternative/replacement of the standard trackbar proposed by Microsoft in Visual Studio.
+ColorSlider is a trackbar control written in C# (Windows Form )
+This is an alternative/replacement of the standard trackbar proposed by Microsoft in Visual Studio which is not so flexible and lack some functionalities.
+
 The code is a free interpretation of the original code from Michal Brylka published in the site Code Project.
+
 See https://www.codeproject.com/Articles/17395/Owner-drawn-trackbar-slider
 
 The enhancements brought by this control are
-* a less surface, 
+* a less surface
 * the possibility to parametrize the shape of the thumb or to replace it by an image.
-* Draw or not the subdivisions and the value of the divisions
+* subdivisions added between main divisions.
+* the text value of the main divisions.
 
 
 # Events:
@@ -21,7 +25,7 @@ The enhancements brought by this control are
 
 Thumb | signification
 ------------ | -------------
-ThumbSize                 | The size of the thumb
+ThumbSize                 | The size of the thumb (Width, Height). allowing you to make circles or rectangles
 ThumbCustomShape          | Gets or sets the thumb custom shape. Use ThumbRect property to determine bounding rectangle.
 ThumbRoundRectSize        | Gets or sets the size of the thumb round rectangle edges.
 BorderRoundRectSize       | Gets or sets the size of the border round rect.
