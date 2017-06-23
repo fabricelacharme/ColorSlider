@@ -113,7 +113,8 @@ ShowSmallScale            | Shows or hides subdivisions of graduations.
 ShowDivisionsText         | Show or hide text value of main graduations.
 
 
-
+# Requirements
+This project was developed with Visual Studio version 2017.
 
 # Author
 Fabrice Lacharme
