@@ -53,9 +53,12 @@ The elapsed bar is composed of 3 single lines (inner, top and bottom), having ea
 e.Graphics.DrawLine(new Pen(elapsedInnerColorPaint, 1f), x1, y1, x2, y2);
 ```
 top and bottom lines are drawn 1 pixel above or under the inner line.
+
+
 ![GitHub Logo](/gifs/elapsed.jpg)
 
 The rest of the bar is also composed of 3 single lines (inner, top and bottom), having each its own color. 
+
 ![GitHub Logo](/gifs/remain.jpg)
 
 The thumb is drawn according to whether it is an image or not:
