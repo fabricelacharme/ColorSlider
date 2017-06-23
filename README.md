@@ -33,18 +33,18 @@ Typical usage of ValueChanged event:
 
 Parameter | signification
 ------------ | -------------
-**Thumb**                 | ?
+**Thumb**                 |  
 ThumbSize                 | The size of the thumb (Width, Height). allowing you to make circles or rectangles
 ThumbCustomShape          | Gets or sets the thumb custom shape. Use ThumbRect property to determine bounding rectangle.
 ThumbRoundRectSize        | Gets or sets the size of the thumb round rectangle edges.
 BorderRoundRectSize       | Gets or sets the size of the border round rect.
 DrawSemitransparentThumb  | Gets or sets a value indicating whether to draw semitransparent thumb.
 ThumbImage                | Gets or sets a specific image used to render the thumb.
-**Appearance**            | ?
+**Appearance**            |  
 Orientation               | Gets or sets the orientation of the Slider(Horizontal or vertical)
 DrawFocusRectangle        | Gets or sets a value indicating whether to draw focus rectangle.
 MouseEffects              | Gets or sets whether mouse entry and exit actions have impact on how control look.
-**Values**                | ?
+**Values**                |  
 Value                     | Gets or sets the value of Slider
 Minimum (0)               | Gets or sets the minimum value.
 Maximum (100)             | Gets or sets the maximum value.
