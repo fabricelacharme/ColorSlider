@@ -930,7 +930,7 @@ namespace ColorSlider
         {
             try
             {
-                //set up thumbRect aproprietly
+                //set up thumbRect approprietly
                 if (_barOrientation == Orientation.Horizontal)
                 {
                     #region horizontal
@@ -967,7 +967,8 @@ namespace ColorSlider
 
                 //adjust drawing rects
                 barRect = ClientRectangle;
-                //barRect = new Rectangle(ClientRectangle.X + 5, ClientRectangle.Y + 5, ClientRectangle.Width - 10, ClientRectangle.Height - 10);
+                // TODO : make barRect rectangle smaller than Control rectangle  
+                // barRect = new Rectangle(ClientRectangle.X + 5, ClientRectangle.Y + 5, ClientRectangle.Width - 10, ClientRectangle.Height - 10);
                 thumbHalfRect = thumbRect;
                 LinearGradientMode gradientOrientation;
 
@@ -1036,7 +1037,7 @@ namespace ColorSlider
 
                 #region draw elapsed bar
 
-                //draw elapsed inner bar                               
+                //draw elapsed inner bar (single line too)                               
                 if (_barOrientation == Orientation.Horizontal)
                 {
                     e.Graphics.DrawLine(new Pen(elapsedInnerColorPaint, 1f), barRect.X, barRect.Y + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y + barRect.Height / 2);
@@ -1208,11 +1209,9 @@ namespace ColorSlider
                         W = barRect.Height - thumbRect.Height;
                         rulerValue = (float)_maximum;
                     }
-
-                    // increment for each tick
-                    //float incr = W / (nbticks - 1);
-
+                    
                     // pen for ticks
+                    // TODO: color for subdivision different?
                     Pen penTickL = new Pen(_tickColor, 1f);
                     Pen penTickS = new Pen(_tickColor, 1f);
                     int idx = 0;
@@ -1221,6 +1220,7 @@ namespace ColorSlider
 
 
                     // strings graduations
+                    // TODO: color for Text different?
                     float tx = 0;
                     float ty = 0;
                     float fSize = (float)(6F);                                        
