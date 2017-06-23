@@ -16,6 +16,7 @@ The main enhancements brought by this control are
 * subdivisions added between main divisions.
 * the text value of the main divisions.
 * many colors parametrization added (ticks, bar, elapsed) 
+* the orientation can be horizontal and vertical (starting from the bottom)
 
 
 # Events:
@@ -28,6 +29,24 @@ Typical usage of ValueChanged event:
      {
          label1.Text = colorSlider1.Value.ToString();
      }
+
+# How does it works?
+The control is drawn in the overrided event "OnPaint",  depending if it is enabled or not, and if the mouse is over it or not.
+* If not enabled, the colors are desaturated.
+* If the mouse is over, the colors are lighten.
+* Else, the colors are those choosen in the property box.
+
+Depending on these colors, the function "DrawColorSlider" is called and draw everything.
+2 rectangles are used to draw the control:
+barRect is used to draw the bar (Elapsed and remaining)
+thumbRect is used to draw the thumb.
+
+The elapsed bar is composed of 3 single lines, each line having its own color:
+one inner bar and 2 others (one on top and one on bottom)
+    e.Graphics.DrawLine(new Pen(elapsedInnerColorPaint, 1f), barRect.X, barRect.Y + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y + barRect.Height / 2);
+
+The rest of the bar is also composed of 3 lines (inner, top and bottom) having each its own color. 
+
 
 # Properties
 
