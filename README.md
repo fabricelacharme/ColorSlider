@@ -5,7 +5,7 @@ A slider control in C#
 
 ColorSlider is a trackbar control written in C# as a replacement of the standard trackbar proposed by Microsoft in Visual Studio.
 It is a free interpretation of the original code from Michal Brylka published in the site Code Project.
-see https://www.codeproject.com/Articles/17395/Owner-drawn-trackbar-slider
+See https://www.codeproject.com/Articles/17395/Owner-drawn-trackbar-slider
 
 The slider shape can be either paint or replaced by an image (ThumbImage property).  
 
@@ -24,11 +24,13 @@ BorderRoundRectSize       | Gets or sets the size of the border round rect.
 DrawSemitransparentThumb  | Gets or sets a value indicating whether to draw semitransparent thumb.
 ThumbImage                | Gets or sets a specific image used to render the thumb.
 
+
 Appearance | signification
 ------------ | -------------
 Orientation               | Gets or sets the orientation of the Slider(Horizontal or vertical)
 DrawFocusRectangle        | Gets or sets a value indicating whether to draw focus rectangle.
 MouseEffects              | Gets or sets whether mouse entry and exit actions have impact on how control look.
+
 
 Values | signification
 ------------ | -------------
@@ -51,11 +53,11 @@ BarPenColorBottom         | Gets or sets the bottom color of the bar
 ElapsedPenColorTop        | Gets or sets the top color the elapsed
 ElapsedPenColorBottom     | Gets or sets the bottom color of the elapsed
 ElapsedInnerColor         | Gets or sets the inner color of the elapsed.
+TickColor                 | Gets or sets the color of the graduations
 
 
 Ticks | signification
 ------------ | -------------
-TickColor                 | Gets or sets the color of the graduations
 TickStyle                 | Gets or sets where to display the ticks (None, both top-left, bottom-right)
 ScaleDivisions            | Gets or sets the number of intervals between minimum and maximum
 ScaleSubDivisions         | Gets or sets the number of subdivisions between main divisions of graduation
