@@ -50,7 +50,7 @@ ThumbPenColor             | Gets or sets the color of the thumb pen.
 BarInnerColor             | Gets or sets the inner color of the bar.
 BarPenColorTop            | Gets or sets the top color of the bar
 BarPenColorBottom         | Gets or sets the bottom color of the bar
-ElapsedPenColorTop        | Gets or sets the top color the elapsed
+ElapsedPenColorTop        | Gets or sets the top color of the elapsed
 ElapsedPenColorBottom     | Gets or sets the bottom color of the elapsed
 ElapsedInnerColor         | Gets or sets the inner color of the elapsed.
 TickColor                 | Gets or sets the color of the graduations
