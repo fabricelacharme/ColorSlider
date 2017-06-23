@@ -24,7 +24,9 @@ The main enhancements brought by this control are
 
 # Properties
 
-Thumb | signification
+## Thumb
+
+Value | signification
 ------------ | -------------
 ThumbSize                 | The size of the thumb (Width, Height). allowing you to make circles or rectangles
 ThumbCustomShape          | Gets or sets the thumb custom shape. Use ThumbRect property to determine bounding rectangle.
