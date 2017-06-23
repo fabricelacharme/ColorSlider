@@ -52,7 +52,7 @@ The elapsed bar is composed of 3 single lines (inner, top and bottom), having ea
 // y2 = y1
 e.Graphics.DrawLine(new Pen(elapsedInnerColorPaint, 1f), x1, y1, x2, y2);
 ```
-top and bottom lines are drawn 1 pixel above or under the inner line. A vertical line of 3 pixels is added at the beginning to imporve the 3D effect.
+top and bottom lines are drawn 1 pixel above or under the inner line. A vertical line of 3 pixels is added at the beginning to improve the 3D effect.
 
 
 ![GitHub Logo](/gifs/elapsed.jpg)
