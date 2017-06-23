@@ -31,7 +31,7 @@ Typical usage of ValueChanged event:
 
 # Properties
 
-Thumb | signification
+Parameter | signification
 ------------ | -------------
 **Thumb**                 | ?
 ThumbSize                 | The size of the thumb (Width, Height). allowing you to make circles or rectangles
@@ -51,27 +51,7 @@ Maximum (100)             | Gets or sets the maximum value.
 SmallChange               | Gets or sets trackbar's small change. It affects how to behave when directional keys are pressed.
 LargeChange               | Gets or sets trackbar's large change. It affects how to behave when PageUp/PageDown keys are pressed.
 MouseWheelBarPartitions   | Gets or sets the mouse wheel bar partitions.
-
-
-Appearance | signification
------------- | -------------
-Orientation               | Gets or sets the orientation of the Slider(Horizontal or vertical)
-DrawFocusRectangle        | Gets or sets a value indicating whether to draw focus rectangle.
-MouseEffects              | Gets or sets whether mouse entry and exit actions have impact on how control look.
-
-
-Values | signification
------------- | -------------
-Value                     | Gets or sets the value of Slider
-Minimum (0)               | Gets or sets the minimum value.
-Maximum (100)             | Gets or sets the maximum value.
-SmallChange               | Gets or sets trackbar's small change. It affects how to behave when directional keys are pressed.
-LargeChange               | Gets or sets trackbar's large change. It affects how to behave when PageUp/PageDown keys are pressed.
-MouseWheelBarPartitions   | Gets or sets the mouse wheel bar partitions.
-
-
-Colors | signification
------------- | -------------
+**Colors**                |  
 ThumbOuterColor           | Gets or sets the thumb outer color.
 ThumbInnerColor           | Gets or sets the inner color of the thumb.
 ThumbPenColor             | Gets or sets the color of the thumb pen.
@@ -82,15 +62,9 @@ ElapsedPenColorTop        | Gets or sets the top color of the elapsed
 ElapsedPenColorBottom     | Gets or sets the bottom color of the elapsed
 ElapsedInnerColor         | Gets or sets the inner color of the elapsed.
 TickColor                 | Gets or sets the color of the graduations
-
-
-Preformated colors | signification
---- | ---
+**Preformated colors**    |  
 ColorSchema               | 3 predefined color schemas are proposed (red, green, blue). The colors can be changed manually and they overwrite them.
-
-
-Ticks | signification
------------- | -------------
+**Ticks**                 |  
 TickStyle                 | Gets or sets where to display the ticks (None, both top-left, bottom-right)
 ScaleDivisions            | Gets or sets the number of intervals between minimum and maximum
 ScaleSubDivisions         | Gets or sets the number of subdivisions between main divisions of graduation
