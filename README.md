@@ -37,15 +37,21 @@ The control is drawn in the overrided event "OnPaint",  depending if it is enabl
 * Else, the colors are those choosen in the property box.
 
 Depending on these colors, the function "DrawColorSlider" is called and draw everything.
-2 rectangles are used to draw the control:
-barRect is used to draw the bar (Elapsed and remaining)
-thumbRect is used to draw the thumb.
 
-The elapsed bar is composed of 3 single lines, each line having its own color:
-one inner bar and 2 others (one on top and one on bottom)
+3 rectangles are mainly used to draw the control:
+* barRect is used to draw the bar (Elapsed and remaining)
+* thumbRect is used to draw the thumb.
+* elapsedRect is the rectangle for the elapsed bar (the left of the thumb if the orientation is horizontal)
+
+The elapsed bar is composed of 3 single lines (inner, top and bottom), having each its own color:
+    // Draw elapsed inner line with "DrawLine" function
+    // x1 = barRect.X
+    // y1 = barRect.Y + barRect.Height / 2
+    // x2 = barRect.X + elapsedRect.Width
+    // y2 = y1
     e.Graphics.DrawLine(new Pen(elapsedInnerColorPaint, 1f), barRect.X, barRect.Y + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y + barRect.Height / 2);
 
-The rest of the bar is also composed of 3 lines (inner, top and bottom) having each its own color. 
+The rest of the bar is also composed of 3 single lines (inner, top and bottom), having each its own color. 
 
 
 # Properties
