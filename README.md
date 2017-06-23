@@ -22,11 +22,16 @@ The main enhancements brought by this control are
 * ValueChanged
 * Scroll
 
+Typical usage of ValueChanged event:
+
+     private void colorSlider1_ValueChanged(object sender, EventArgs e)
+     {
+         label1.Text = colorSlider1.Value.ToString();
+     }
+
 # Properties
 
-## Thumb
-
-Value | signification
+Thumb | signification
 ------------ | -------------
 ThumbSize                 | The size of the thumb (Width, Height). allowing you to make circles or rectangles
 ThumbCustomShape          | Gets or sets the thumb custom shape. Use ThumbRect property to determine bounding rectangle.
