@@ -44,14 +44,25 @@ Depending on these colors, the function "DrawColorSlider" is called and draw eve
 * elapsedRect is the rectangle for the elapsed bar (the left of the thumb if the orientation is horizontal)
 
 The elapsed bar is composed of 3 single lines (inner, top and bottom), having each its own color:
-    // Draw elapsed inner line with "DrawLine" function
-    // x1 = barRect.X
-    // y1 = barRect.Y + barRect.Height / 2
-    // x2 = barRect.X + elapsedRect.Width
-    // y2 = y1
-    e.Graphics.DrawLine(new Pen(elapsedInnerColorPaint, 1f), barRect.X, barRect.Y + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y + barRect.Height / 2);
+```
+// Draw horizontal elapsed inner line with "DrawLine" function
+// x1 = barRect.X
+// y1 = barRect.Y + barRect.Height / 2
+// x2 = barRect.X + elapsedRect.Width
+// y2 = y1
+e.Graphics.DrawLine(new Pen(elapsedInnerColorPaint, 1f), x1, y1, x2, y2);
+```
+top and bottom lines are drawn 1 pixel above or under the inner line.
 
 The rest of the bar is also composed of 3 single lines (inner, top and bottom), having each its own color. 
+
+The thumb is drawn according to whether it is an image or not:
+* Image: e.Graphics.DrawImage(bmp, thumbRect, srceRect, GraphicsUnit.Pixel);
+* Drawn by the control,with a linear gradien e.Graphics.DrawPath(thumbPen, thumbPath);
+
+The ticks and texts are drawn in two nested loops
+* first loop from 0 to ScaleDividion for the main graduations and textx
+* nested loop from 0 to ScaleSubDivision for the subdivisions
 
 
 # Properties
