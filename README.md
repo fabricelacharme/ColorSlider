@@ -65,6 +65,11 @@ ElapsedInnerColor         | Gets or sets the inner color of the elapsed.
 TickColor                 | Gets or sets the color of the graduations
 
 
+Preformated colors | signification
+--- | ---
+ColorSchema               | 3 predefined color schemas are proposed (red, green, blue). The colors can be changed manually and they overwrite them.
+
+
 Ticks | signification
 ------------ | -------------
 TickStyle                 | Gets or sets where to display the ticks (None, both top-left, bottom-right)
