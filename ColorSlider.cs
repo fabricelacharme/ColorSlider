@@ -43,10 +43,24 @@ using System.Windows.Forms;
 
 namespace ColorSlider
 {
-    // Original code from Michal Brylka on Code Project
-    // see https://www.codeproject.com/Articles/17395/Owner-drawn-trackbar-slider
-    // ColorSlider is a trackbar control written in C# as a replacement of the trackbar 
-    // proposed by Microsoft in Visual Studio
+    /* Original code from Michal Brylka on Code Project
+    * see https://www.codeproject.com/Articles/17395/Owner-drawn-trackbar-slider
+    * ColorSlider is a trackbar control written in C# as a replacement of the trackbar 
+    * proposed by Microsoft in Visual Studio
+    * 
+    * 20/11/17 - version 1.0.O.1
+    * 
+    * Fixed: erroneous vertical display in case of minimum <> 0 (negative or positive)
+    * Modified: DrawColorSlider, OnMouseMove
+    * 
+    * Added: Ticks display transformations
+    * - TickAdd: allow to add a fixed value to the graduations: 
+    *       usage: transform K = °C + 273,15, or °F = 1,8°C + 32   K = (°F + 459,67) / 1,8
+    * - TickDivide: allow to diveide by a fixed value the graduations 
+    *       usage: divide by 1000 => display graduations in kilograms when in gram
+    */
+
+
 
     /// <summary>
     /// Encapsulates control that visualy displays certain integer value and allows user to change it within desired range. It imitates <see cref="System.Windows.Forms.TrackBar"/> as far as mouse usage is concerned.
@@ -250,9 +264,13 @@ namespace ColorSlider
                 if (_barOrientation != value)
                 {
                     _barOrientation = value;
-                    int temp = Width;
-                    Width = Height;
-                    Height = temp;
+                    // Switch from horizontal to vertical (design mode)                    
+                    if (this.DesignMode)
+                    {
+                        int temp = Width;
+                        Width = Height;
+                        Height = temp;
+                    }
 
                     //if (_thumbCustomShape != null)
                     //    _thumbSize = (int)(_barOrientation == Orientation.Horizontal ? _thumbCustomShape.GetBounds().Width : _thumbCustomShape.GetBounds().Height) + 1;
@@ -618,6 +636,37 @@ namespace ColorSlider
 
         #region divisions
 
+        // For ex: if values are multiples of 50, 
+        // values = 0, 50, 100, 150 etc...
+        //set TickDivide to 50
+        // And ticks will be displayed as 
+        // values = 0, 1, 2, 3 etc...
+        private float _tickDivide = 0;
+
+        [Description("Gets or sets a value used to divide the graduation")]
+        [Category("ColorSlider")]
+        public float TickDivide
+        {
+            get { return _tickDivide; }
+            set {
+                _tickDivide = value;
+                Invalidate();
+            }
+        }
+
+        private float _tickAdd = 0;
+        [Description("Gets or sets a value added to the graduation")]
+        [Category("ColorSlider")]
+        public float TickAdd
+        {
+            get { return _tickAdd; }
+            set { _tickAdd = value;
+                Invalidate();
+            }
+        }
+
+
+
         private TickStyle _tickStyle = TickStyle.TopLeft;
         /// <summary>
         /// Gets or sets where to display the ticks (None, both top-left, bottom-right)
@@ -646,8 +695,7 @@ namespace ColorSlider
             set {
                 if (value > 0)
                 {
-                    _scaleDivisions = value;
-                    
+                    _scaleDivisions = value;                    
                 }
                 //else throw new ArgumentOutOfRangeException("TickFreqency must be > 0 and < Maximum");
 
@@ -725,6 +773,33 @@ namespace ColorSlider
             }
         }
 
+        #endregion
+
+
+        #region Font
+
+        /// <summary>
+        /// Get or Sets the Font of the Text being displayed.
+        /// </summary>
+        [Bindable(true),
+        Browsable(true),
+        Category("ColorSlider"),
+        Description("Get or Sets the Font of the Text being displayed."),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible),
+        EditorBrowsable(EditorBrowsableState.Always)]
+        public override Font Font
+        {
+            get
+            {
+                return base.Font;
+            }
+            set
+            {
+                base.Font = value;
+                Invalidate();
+                OnFontChanged(EventArgs.Empty);
+            }
+        }
         #endregion
 
         #endregion
@@ -846,8 +921,10 @@ namespace ColorSlider
             
             // Default backcolor
             BackColor = Color.FromArgb(70, 77, 95);
-            
-             
+
+            // Font
+            //this.Font = new Font("Tahoma", 6.75f);
+            this.Font = new Font("Microsoft Sans Serif", 6f);
 
             Minimum = min;
             Maximum = max;
@@ -941,8 +1018,7 @@ namespace ColorSlider
                     }
                     else
                     {
-                        int TrackX = (((_trackerValue - _minimum) * (ClientRectangle.Width - _thumbSize.Width)) / (_maximum - _minimum));
-                        //thumbRect = new Rectangle(TrackX, 1, _thumbSize - 1, ClientRectangle.Height - 3);
+                        int TrackX = (((_trackerValue - _minimum) * (ClientRectangle.Width - _thumbSize.Width)) / (_maximum - _minimum));                        
                         thumbRect = new Rectangle(TrackX, ClientRectangle.Y + ClientRectangle.Height/2 - _thumbSize.Height/2 , _thumbSize.Width, _thumbSize.Height);
                     }
                     #endregion
@@ -951,14 +1027,13 @@ namespace ColorSlider
                 {
                     #region vertical
                     if (_thumbImage != null)
-                    {
-                        int TrackY = (((_maximum - (_trackerValue - _minimum)) * (ClientRectangle.Height - _thumbImage.Height)) / (_maximum - _minimum));
+                    {                        
+                        int TrackY = (((_maximum - (_trackerValue)) * (ClientRectangle.Height - _thumbImage.Height)) / (_maximum - _minimum));
                         thumbRect = new Rectangle(ClientRectangle.Width/2 - _thumbImage.Width/2, TrackY, _thumbImage.Width, _thumbImage.Height);
                     }
                     else
-                    {
-                        int TrackY = (((_maximum - (_trackerValue - _minimum)) * (ClientRectangle.Height - _thumbSize.Height)) / (_maximum - _minimum));
-                        //thumbRect = new Rectangle(1, TrackY, ClientRectangle.Width - 3, _thumbSize - 1);
+                    {                        
+                        int TrackY = (((_maximum - (_trackerValue)) * (ClientRectangle.Height - _thumbSize.Height)) / (_maximum - _minimum));
                         thumbRect = new Rectangle(ClientRectangle.X + ClientRectangle.Width/2 - _thumbSize.Width/2, TrackY, _thumbSize.Width, _thumbSize.Height);
                     }
                     #endregion
@@ -1223,7 +1298,7 @@ namespace ColorSlider
                     // TODO: color for Text different?
                     float tx = 0;
                     float ty = 0;
-                    float fSize = (float)(6F);                                        
+                    //float fSize = (float)(7F);
 
                     int startDiv = 0;
 
@@ -1232,7 +1307,8 @@ namespace ColorSlider
 
                     // Caluculate max size of text 
                     String str = String.Format("{0,0:D}", _maximum);
-                    Font font = new Font(this.Font.FontFamily, fSize);
+                    //Font font = new Font(this.Font.FontFamily, fSize);
+                    Font font = this.Font;
                     SizeF maxsize = e.Graphics.MeasureString(str, font);
 
 
@@ -1245,6 +1321,14 @@ namespace ColorSlider
                     {
                         // Calculate current text size
                         double val = Math.Round(rulerValue);
+
+                        // apply a transformation to the ticks displayed
+                        if (_tickDivide != 0)
+                            val = val / _tickDivide;
+
+                        if (_tickAdd != 0)
+                            val = val + _tickAdd;                       
+
                         str = String.Format("{0,0:D}", (int)val);                                               
                         SizeF size = e.Graphics.MeasureString( str, font );                       
 
@@ -1273,7 +1357,6 @@ namespace ColorSlider
                             }
 
                             
-
                             // draw main ticks                           
                             if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                             {                                 
@@ -1405,10 +1488,7 @@ namespace ColorSlider
                             }
 
                             #endregion
-                        }
-
-                       
-
+                        }                       
                     }
                 }
                 #endregion
@@ -1499,8 +1579,8 @@ namespace ColorSlider
                              (float)
                              ((_barOrientation == Orientation.Horizontal ? ClientSize.Width : ClientSize.Height) - 2 * margin);
 
-                              
-                _trackerValue = _barOrientation == Orientation.Horizontal ? (int)(p * coef + _minimum) : (_maximum - (int)(p * coef + _minimum));
+                
+                _trackerValue = _barOrientation == Orientation.Horizontal ? (int)(p * coef + _minimum) : (_maximum - (int)(p * coef));
 
 
                 if (_trackerValue <= _minimum)
