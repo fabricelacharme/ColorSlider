@@ -37,6 +37,7 @@ C:\Users\a453868\Documents\Visual Studio 2017\Projects\Buttons\ColorSliderProjec
 C:\Users\a453868\Documents\Visual Studio 2017\Projects\Buttons\ColorSliderProject\ColorSlider\obj\Debug\ColorSlider.csproj.CoreCompileInputs.cache
 C:\Users\a453868\Documents\Visual Studio 2017\Projects\Buttons\ColorSliderProject\ColorSlider\obj\Debug\ColorSlider.dll
 C:\Users\a453868\Documents\Visual Studio 2017\Projects\Buttons\ColorSliderProject\ColorSlider\obj\Debug\ColorSlider.pdb
+<<<<<<< HEAD
 C:\Users\Fabrice\Documents\Visual Studio 2017\Projects\ColorSliderProject\ColorSlider\bin\Debug\ColorSlider.dll
 C:\Users\Fabrice\Documents\Visual Studio 2017\Projects\ColorSliderProject\ColorSlider\bin\Debug\ColorSlider.pdb
 C:\Users\Fabrice\Documents\Visual Studio 2017\Projects\ColorSliderProject\ColorSlider\obj\Debug\ColorSlider.csprojResolveAssemblyReference.cache
@@ -46,3 +47,5 @@ C:\Users\Fabrice\Documents\Visual Studio 2017\Projects\ColorSliderProject\ColorS
 C:\Users\Fabrice\Documents\Visual Studio 2017\Projects\ColorSliderProject\ColorSlider\obj\Debug\ColorSlider.csproj.CoreCompileInputs.cache
 C:\Users\Fabrice\Documents\Visual Studio 2017\Projects\ColorSliderProject\ColorSlider\obj\Debug\ColorSlider.dll
 C:\Users\Fabrice\Documents\Visual Studio 2017\Projects\ColorSliderProject\ColorSlider\obj\Debug\ColorSlider.pdb
+=======
+>>>>>>> 1ceabd7fe3bd6ff852dfc878f7c148b42883d145

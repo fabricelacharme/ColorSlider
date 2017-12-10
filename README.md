@@ -121,7 +121,10 @@ TickDivide                | (float) Gets or sets a value used to divide the grad
 TickAdd                   | (float) Gets or sets a value added to the graduations (ex: T(°C) = T(K) - 273.15)
 **Font**                  | 
 Font                      | Gets or sets the font of the text graduations
+<<<<<<< HEAD
 ForeColor                 | Gets or sets the color of the text graduations
+=======
+>>>>>>> 1ceabd7fe3bd6ff852dfc878f7c148b42883d145
 
 
 # Requirements
