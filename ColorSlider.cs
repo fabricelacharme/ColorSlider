@@ -46,14 +46,9 @@ namespace ColorSlider
     /* Original code from Michal Brylka on Code Project
     * see https://www.codeproject.com/Articles/17395/Owner-drawn-trackbar-slider
     * ColorSlider is a trackbar control written in C# as a replacement of the trackbar 
-<<<<<<< HEAD
-    * proposed by Microsoft in Visual Studio.
     * 
     * CodeProject: https://www.codeproject.com/Tips/1193311/Csharp-Slider-Trackbar-Control-using-Windows-Forms
     * Github: https://github.com/fabricelacharme/ColorSlider
-=======
-    * proposed by Microsoft in Visual Studio
->>>>>>> 1ceabd7fe3bd6ff852dfc878f7c148b42883d145
     * 
     * 20/11/17 - version 1.0.O.1
     * 
@@ -65,15 +60,12 @@ namespace ColorSlider
     *       usage: transform K = °C + 273,15, or °F = 1,8°C + 32   K = (°F + 459,67) / 1,8
     * - TickDivide: allow to diveide by a fixed value the graduations 
     *       usage: divide by 1000 => display graduations in kilograms when in gram
-<<<<<<< HEAD
     *       
     *       
     * 10/12/17 - version 1.0.0.2
     * 
     * Added ForeColor property to graduations text color
     * 
-=======
->>>>>>> 1ceabd7fe3bd6ff852dfc878f7c148b42883d145
     */
 
 
