@@ -808,7 +808,6 @@ namespace ColorSlider
                 OnFontChanged(EventArgs.Empty);
             }
         }
-<<<<<<< HEAD
 
         /// <summary>
         /// Get or Sets the Font of the Text being displayed.
@@ -955,10 +954,7 @@ namespace ColorSlider
             
             // Default backcolor
             BackColor = Color.FromArgb(70, 77, 95);
-<<<<<<< HEAD
             ForeColor = Color.White;
-=======
->>>>>>> 1ceabd7fe3bd6ff852dfc878f7c148b42883d145
 
             // Font
             //this.Font = new Font("Tahoma", 6.75f);
