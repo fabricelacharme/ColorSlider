@@ -28,3 +28,12 @@ C:\Users\a453868\Documents\Visual Studio 2017\Projects\ColorSlider\ColorSlider\o
 C:\Users\Fabrice\Documents\Visual Studio 2017\Projects\ColorSlider\ColorSlider\obj\Release\ColorSlider.csprojResolveAssemblyReference.cache
 C:\Users\Fabrice\Documents\Visual Studio 2017\Projects\ColorSlider\ColorSlider\obj\Release\ColorSlider.ColorSlider.resources
 C:\Users\Fabrice\Documents\Visual Studio 2017\Projects\ColorSlider\ColorSlider\obj\Release\ColorSlider.Properties.Resources.resources
+C:\Users\a453868\Documents\Visual Studio 2017\Projects\Buttons\ColorSliderProject\ColorSlider\bin\Release\ColorSlider.dll
+C:\Users\a453868\Documents\Visual Studio 2017\Projects\Buttons\ColorSliderProject\ColorSlider\bin\Release\ColorSlider.pdb
+C:\Users\a453868\Documents\Visual Studio 2017\Projects\Buttons\ColorSliderProject\ColorSlider\obj\Release\ColorSlider.csprojResolveAssemblyReference.cache
+C:\Users\a453868\Documents\Visual Studio 2017\Projects\Buttons\ColorSliderProject\ColorSlider\obj\Release\ColorSlider.ColorSlider.resources
+C:\Users\a453868\Documents\Visual Studio 2017\Projects\Buttons\ColorSliderProject\ColorSlider\obj\Release\ColorSlider.Properties.Resources.resources
+C:\Users\a453868\Documents\Visual Studio 2017\Projects\Buttons\ColorSliderProject\ColorSlider\obj\Release\ColorSlider.csproj.GenerateResource.Cache
+C:\Users\a453868\Documents\Visual Studio 2017\Projects\Buttons\ColorSliderProject\ColorSlider\obj\Release\ColorSlider.csproj.CoreCompileInputs.cache
+C:\Users\a453868\Documents\Visual Studio 2017\Projects\Buttons\ColorSliderProject\ColorSlider\obj\Release\ColorSlider.dll
+C:\Users\a453868\Documents\Visual Studio 2017\Projects\Buttons\ColorSliderProject\ColorSlider\obj\Release\ColorSlider.pdb
