@@ -117,6 +117,8 @@ ScaleDivisions            | Gets or sets the number of intervals between minimum
 ScaleSubDivisions         | Gets or sets the number of subdivisions between main divisions of graduation
 ShowSmallScale            | Shows or hides subdivisions of graduations.
 ShowDivisionsText         | Show or hide text value of main graduations.
+**Font**                  | 
+Font                      | Gets or sets the font of the text graduations
 
 
 # Requirements
