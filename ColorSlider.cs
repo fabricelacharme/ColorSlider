@@ -831,8 +831,6 @@ namespace ColorSlider
             }
         }
 
-=======
->>>>>>> 1ceabd7fe3bd6ff852dfc878f7c148b42883d145
         #endregion
 
         #endregion
