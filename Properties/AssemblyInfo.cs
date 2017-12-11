@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyConfiguration("")]
 [assembly : AssemblyCompany("")]
 [assembly : AssemblyProduct("ColorSlider")]
-[assembly: AssemblyCopyright("Copyright © Fabrice Lacharme 2017")]
+[assembly: AssemblyCopyright("Copyright Â© Fabrice Lacharme 2017")]
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]
 
@@ -29,10 +29,6 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-<<<<<<< HEAD
 [assembly : AssemblyVersion("1.0.0.2")]
 [assembly : AssemblyFileVersion("1.0.0.2")]
-=======
-[assembly : AssemblyVersion("1.0.0.1")]
-[assembly : AssemblyFileVersion("1.0.0.1")]
->>>>>>> 1ceabd7fe3bd6ff852dfc878f7c148b42883d145
+
