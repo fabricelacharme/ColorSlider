@@ -68,8 +68,6 @@ namespace ColorSlider
     * 
     */
 
-
-
     /// <summary>
     /// Encapsulates control that visualy displays certain integer value and allows user to change it within desired range. It imitates <see cref="System.Windows.Forms.TrackBar"/> as far as mouse usage is concerned.
     /// </summary>
@@ -115,7 +113,6 @@ namespace ColorSlider
         {
             get { return thumbRect; }
         }
-
 
         private Size _thumbSize = new Size(16, 16);
 
@@ -210,7 +207,6 @@ namespace ColorSlider
             }
         }
 
-
         private bool _drawSemitransparentThumb = true;
         /// <summary>
         /// Gets or sets a value indicating whether to draw semitransparent thumb.
@@ -272,7 +268,8 @@ namespace ColorSlider
                 if (_barOrientation != value)
                 {
                     _barOrientation = value;
-                    // Switch from horizontal to vertical (design mode)                    
+                    // Switch from horizontal to vertical (design mode)
+					// Comment these lines if problems in Run mode
                     if (this.DesignMode)
                     {
                         int temp = Width;
@@ -280,8 +277,6 @@ namespace ColorSlider
                         Height = temp;
                     }
 
-                    //if (_thumbCustomShape != null)
-                    //    _thumbSize = (int)(_barOrientation == Orientation.Horizontal ? _thumbCustomShape.GetBounds().Width : _thumbCustomShape.GetBounds().Height) + 1;
                     Invalidate();
                 }
             }
@@ -352,7 +347,6 @@ namespace ColorSlider
             }
         }
 
-
         private int _minimum = 0;
         /// <summary>
         /// Gets or sets the minimum value.
@@ -380,7 +374,6 @@ namespace ColorSlider
                 else throw new ArgumentOutOfRangeException("Minimal value is greather than maximal one");
             }
         }
-
 
         private int _maximum = 100;
         /// <summary>
@@ -481,7 +474,6 @@ namespace ColorSlider
             }
         }
 
-
         private Color _thumbInnerColor = Color.FromArgb(21, 56, 152);
         /// <summary>
         /// Gets or sets the inner color of the thumb.
@@ -498,7 +490,6 @@ namespace ColorSlider
                 Invalidate();
             }
         }
-
 
         private Color _thumbPenColor = Color.FromArgb(21, 56, 152);
         /// <summary>
@@ -517,7 +508,6 @@ namespace ColorSlider
             }
         }
 
-    
         private Color _barInnerColor = Color.Black;
         /// <summary>
         /// Gets or sets the inner color of the bar.
@@ -535,7 +525,6 @@ namespace ColorSlider
                 Invalidate();
             }
         }
-       
 
         private Color _elapsedPenColorTop = Color.FromArgb(95, 140, 180);   // bleu clair
         /// <summary>
@@ -553,7 +542,6 @@ namespace ColorSlider
             }
         }
 
-
         private Color _elapsedPenColorBottom = Color.FromArgb(99, 130, 208);   // bleu très clair
         /// <summary>
         /// Gets or sets the bottom color of the elapsed
@@ -569,7 +557,6 @@ namespace ColorSlider
                 Invalidate();
             }
         }
-
 
         private Color _barPenColorTop = Color.FromArgb(55, 60, 74);     // gris foncé
         /// <summary>
@@ -673,8 +660,6 @@ namespace ColorSlider
             }
         }
 
-
-
         private TickStyle _tickStyle = TickStyle.TopLeft;
         /// <summary>
         /// Gets or sets where to display the ticks (None, both top-left, bottom-right)
@@ -708,7 +693,6 @@ namespace ColorSlider
                 //else throw new ArgumentOutOfRangeException("TickFreqency must be > 0 and < Maximum");
 
                 Invalidate();
-                
             }
         }
 
@@ -731,7 +715,6 @@ namespace ColorSlider
                 //else throw new ArgumentOutOfRangeException("TickSubFreqency must be > 0 and < TickFrequency");
 
                 Invalidate();
-
             }
         }
 
@@ -818,7 +801,7 @@ namespace ColorSlider
         Description("Get or Sets the Color of the Text being displayed."),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible),
         EditorBrowsable(EditorBrowsableState.Always)]
-        public override Color ForeColor        {
+        public override Color ForeColor {
             get
             {
                 return base.ForeColor;
@@ -827,7 +810,7 @@ namespace ColorSlider
             {
                 base.ForeColor = value;
                 Invalidate();
-                OnFontChanged(EventArgs.Empty);
+                OnForeColorChanged(EventArgs.Empty);
             }
         }
 
@@ -932,7 +915,7 @@ namespace ColorSlider
         }
 
         #endregion
-        
+
 
         #region Constructors
 
