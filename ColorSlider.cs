@@ -63,8 +63,10 @@ namespace ColorSlider
     *       
     *       
     * 10/12/17 - version 1.0.0.2
-    * 
     * Added ForeColor property to graduations text color
+    * 
+    * 29/11/2019 - Version 1.0.0.3
+    * Scale accept decimal negative values (-0.5 to 5.5 for ex)
     * 
     */
 
@@ -323,7 +325,7 @@ namespace ColorSlider
 
         #region values
 
-        private int _trackerValue = 30;
+        private decimal _trackerValue = 30;
         /// <summary>
         /// Gets or sets the value of Slider.
         /// </summary>
@@ -332,7 +334,7 @@ namespace ColorSlider
         [Description("Set Slider value")]
         [Category("ColorSlider")]
         [DefaultValue(30)]
-        public int Value
+        public decimal Value
         {
             get { return _trackerValue; }
             set
@@ -347,7 +349,7 @@ namespace ColorSlider
             }
         }
 
-        private int _minimum = 0;
+        private decimal _minimum = 0;
         /// <summary>
         /// Gets or sets the minimum value.
         /// </summary>
@@ -356,7 +358,7 @@ namespace ColorSlider
         [Description("Set Slider minimal point")]
         [Category("ColorSlider")]
         [DefaultValue(0)]
-        public int Minimum
+        public decimal Minimum
         {
             get { return _minimum; }
             set
@@ -375,7 +377,7 @@ namespace ColorSlider
             }
         }
 
-        private int _maximum = 100;
+        private decimal _maximum = 100;
         /// <summary>
         /// Gets or sets the maximum value.
         /// </summary>
@@ -384,7 +386,7 @@ namespace ColorSlider
         [Description("Set Slider maximal point")]
         [Category("ColorSlider")]
         [DefaultValue(100)]
-        public int Maximum
+        public decimal Maximum
         {
             get { return _maximum; }
             set
@@ -403,7 +405,7 @@ namespace ColorSlider
             }
         }
 
-        private uint _smallChange = 1;
+        private decimal _smallChange = 1;
         /// <summary>
         /// Gets or sets trackbar's small change. It affects how to behave when directional keys are pressed
         /// </summary>
@@ -411,13 +413,13 @@ namespace ColorSlider
         [Description("Set trackbar's small change")]
         [Category("ColorSlider")]
         [DefaultValue(1)]
-        public uint SmallChange
+        public decimal SmallChange
         {
             get { return _smallChange; }
             set { _smallChange = value; }
         }
 
-        private uint _largeChange = 5;
+        private decimal _largeChange = 5;
         /// <summary>
         /// Gets or sets trackbar's large change. It affects how to behave when PageUp/PageDown keys are pressed
         /// </summary>
@@ -425,7 +427,7 @@ namespace ColorSlider
         [Description("Set trackbar's large change")]
         [Category("ColorSlider")]
         [DefaultValue(5)]
-        public uint LargeChange
+        public decimal LargeChange
         {
             get { return _largeChange; }
             set { _largeChange = value; }
@@ -676,13 +678,13 @@ namespace ColorSlider
             }
         }
 
-        private int _scaleDivisions = 10;
+        private decimal _scaleDivisions = 10;
         /// <summary>
         /// How many divisions of maximum?
         /// </summary>
         [Description("Set the number of intervals between minimum and maximum")]
         [Category("ColorSlider")]
-        public int ScaleDivisions
+        public decimal ScaleDivisions
         {
             get { return _scaleDivisions; }
             set {
@@ -696,13 +698,13 @@ namespace ColorSlider
             }
         }
 
-        private int _scaleSubDivisions = 5;
+        private decimal _scaleSubDivisions = 5;
         /// <summary>
         /// How many subdivisions for each division
         /// </summary>
         [Description("Set the number of subdivisions between main divisions of graduation.")]
         [Category("ColorSlider")]
-        public int ScaleSubDivisions
+        public decimal ScaleSubDivisions
         {
             get { return _scaleSubDivisions; }
             set
@@ -925,7 +927,7 @@ namespace ColorSlider
         /// <param name="min">The minimum value.</param>
         /// <param name="max">The maximum value.</param>
         /// <param name="value">The current value.</param>
-        public ColorSlider(int min, int max, int value)
+        public ColorSlider(decimal min, decimal max, decimal value)
         {
             InitializeComponent();
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer |
@@ -1028,13 +1030,13 @@ namespace ColorSlider
                     #region horizontal
                     if (_thumbImage != null)
                     {
-                        int TrackX = (((_trackerValue - _minimum) * (ClientRectangle.Width - _thumbImage.Width)) / (_maximum - _minimum));
-                        thumbRect = new Rectangle(TrackX, ClientRectangle.Height/2 - _thumbImage.Height/2, _thumbImage.Width, _thumbImage.Height);
+                        decimal TrackX = (((_trackerValue - _minimum) * (ClientRectangle.Width - _thumbImage.Width)) / (_maximum - _minimum));
+                        thumbRect = new Rectangle((int)TrackX, ClientRectangle.Height/2 - _thumbImage.Height/2, _thumbImage.Width, _thumbImage.Height);
                     }
                     else
                     {
-                        int TrackX = (((_trackerValue - _minimum) * (ClientRectangle.Width - _thumbSize.Width)) / (_maximum - _minimum));                        
-                        thumbRect = new Rectangle(TrackX, ClientRectangle.Y + ClientRectangle.Height/2 - _thumbSize.Height/2 , _thumbSize.Width, _thumbSize.Height);
+                        decimal TrackX = (((_trackerValue - _minimum) * (ClientRectangle.Width - _thumbSize.Width)) / (_maximum - _minimum));                        
+                        thumbRect = new Rectangle((int)TrackX, ClientRectangle.Y + ClientRectangle.Height/2 - _thumbSize.Height/2 , _thumbSize.Width, _thumbSize.Height);
                     }
                     #endregion
                 }
@@ -1043,13 +1045,13 @@ namespace ColorSlider
                     #region vertical
                     if (_thumbImage != null)
                     {                        
-                        int TrackY = (((_maximum - (_trackerValue)) * (ClientRectangle.Height - _thumbImage.Height)) / (_maximum - _minimum));
-                        thumbRect = new Rectangle(ClientRectangle.Width/2 - _thumbImage.Width/2, TrackY, _thumbImage.Width, _thumbImage.Height);
+                        decimal TrackY = (((_maximum - (_trackerValue)) * (ClientRectangle.Height - _thumbImage.Height)) / (_maximum - _minimum));
+                        thumbRect = new Rectangle(ClientRectangle.Width/2 - _thumbImage.Width/2, (int)TrackY, _thumbImage.Width, _thumbImage.Height);
                     }
                     else
                     {                        
-                        int TrackY = (((_maximum - (_trackerValue)) * (ClientRectangle.Height - _thumbSize.Height)) / (_maximum - _minimum));
-                        thumbRect = new Rectangle(ClientRectangle.X + ClientRectangle.Width/2 - _thumbSize.Width/2, TrackY, _thumbSize.Width, _thumbSize.Height);
+                        decimal TrackY = (((_maximum - (_trackerValue)) * (ClientRectangle.Height - _thumbSize.Height)) / (_maximum - _minimum));
+                        thumbRect = new Rectangle(ClientRectangle.X + ClientRectangle.Width/2 - _thumbSize.Width/2, (int)TrackY, _thumbSize.Width, _thumbSize.Height);
                     }
                     #endregion
                 }
@@ -1277,7 +1279,7 @@ namespace ColorSlider
                 if (_tickStyle != TickStyle.None)
                 {
                     int x1, x2, y1, y2 = 0;
-                    int nbticks = 1 +  _scaleDivisions * (_scaleSubDivisions + 1);                    
+                    int nbticks = 1 +  (int)(_scaleDivisions * (_scaleSubDivisions + 1));                    
                     int interval = 0;
                     int start = 0;
                     int W = 0;
@@ -1323,7 +1325,7 @@ namespace ColorSlider
                     SolidBrush br = new SolidBrush(_scaleColor);
 
                     // Caluculate max size of text 
-                    String str = String.Format("{0,0:D}", _maximum);
+                    String str = String.Format("{0,0:D}", (int)_maximum);
                     //Font font = new Font(this.Font.FontFamily, fSize);
                     Font font = this.Font;
                     SizeF maxsize = e.Graphics.MeasureString(str, font);
@@ -1337,16 +1339,18 @@ namespace ColorSlider
                     for (int i = 0; i <= _scaleDivisions; i++)
                     {
                         // Calculate current text size
-                        double val = Math.Round(rulerValue);
+                        //double val = Math.Round(rulerValue);
+                        double val = rulerValue;
 
                         // apply a transformation to the ticks displayed
                         if (_tickDivide != 0)
                             val = val / _tickDivide;
 
                         if (_tickAdd != 0)
-                            val = val + _tickAdd;                       
+                            val = val + _tickAdd;
 
-                        str = String.Format("{0,0:D}", (int)val);                                               
+                        //str = String.Format("{0,0:D}", val);
+                        str = String.Format("{0:0.##}", val);
                         SizeF size = e.Graphics.MeasureString( str, font );                       
 
                         // HORIZONTAL
@@ -1569,7 +1573,7 @@ namespace ColorSlider
             if (e.Button == MouseButtons.Left)
             {
                 Capture = true;
-                if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.ThumbTrack, _trackerValue));
+                if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.ThumbTrack, (int)_trackerValue));
                 if (ValueChanged != null) ValueChanged(this, new EventArgs());
                 OnMouseMove(e);
             }
@@ -1585,20 +1589,33 @@ namespace ColorSlider
         {
             base.OnMouseMove(e);
             mouseInThumbRegion = IsPointInRect(e.Location, thumbRect);
+            
             if (Capture & e.Button == MouseButtons.Left)
             {
                 ScrollEventType set = ScrollEventType.ThumbPosition;
                 Point pt = e.Location;
                 int p = _barOrientation == Orientation.Horizontal ? pt.X : pt.Y;
+
+                //FAB
+                //decimal division = (_maximum - _minimum) / _smallChange;
+
+
                 int margin = _thumbSize.Height >> 1;
                 p -= margin;
+
+                /*
                 float coef = (float)(_maximum - _minimum) /
                              (float)
                              ((_barOrientation == Orientation.Horizontal ? ClientSize.Width : ClientSize.Height) - 2 * margin);
+                */
+                decimal coef = (_maximum - _minimum) /                             
+                             ((_barOrientation == Orientation.Horizontal ? ClientSize.Width : ClientSize.Height) - 2 * margin);
 
-                
-                _trackerValue = _barOrientation == Orientation.Horizontal ? (int)(p * coef + _minimum) : (_maximum - (int)(p * coef));
+                _trackerValue = _barOrientation == Orientation.Horizontal ? (p * coef + _minimum) : (_maximum - (p * coef));
 
+                // Number of divisions
+                int nbdiv = (int)(Math.Round(_trackerValue / _smallChange)); //(int)(_trackerValue / _smallChange);
+                _trackerValue = nbdiv * _smallChange;
 
                 if (_trackerValue <= _minimum)
                 {
@@ -1611,7 +1628,7 @@ namespace ColorSlider
                     set = ScrollEventType.Last;
                 }
 
-                if (Scroll != null) Scroll(this, new ScrollEventArgs(set, _trackerValue));
+                if (Scroll != null) Scroll(this, new ScrollEventArgs(set, (int)_trackerValue));
                 if (ValueChanged != null) ValueChanged(this, new EventArgs());
             }
             Invalidate();
@@ -1626,7 +1643,7 @@ namespace ColorSlider
             base.OnMouseUp(e);
             Capture = false;
             mouseInThumbRegion = IsPointInRect(e.Location, thumbRect);
-            if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.EndScroll, _trackerValue));
+            if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.EndScroll, (int)_trackerValue));
             if (ValueChanged != null) ValueChanged(this, new EventArgs());
             Invalidate();
         }
@@ -1641,7 +1658,7 @@ namespace ColorSlider
 
             if (mouseInRegion)
             {
-                int v = e.Delta / 120 * (_maximum - _minimum) / _mouseWheelBarPartitions;
+                decimal v = e.Delta / 120 * (_maximum - _minimum) / _mouseWheelBarPartitions;
                 SetProperValue(Value + v);
 
                 // Avoid to send MouseWheel event to the parent container
@@ -1681,12 +1698,12 @@ namespace ColorSlider
                 case Keys.Down:
                 case Keys.Left:
                     SetProperValue(Value - (int)_smallChange);
-                    if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.SmallDecrement, Value));
+                    if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.SmallDecrement, (int)Value));
                     break;
                 case Keys.Up:
                 case Keys.Right:
                     SetProperValue(Value + (int)_smallChange);
-                    if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.SmallIncrement, Value));
+                    if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.SmallIncrement, (int)Value));
                     break;
                 case Keys.Home:
                     Value = _minimum;
@@ -1696,15 +1713,15 @@ namespace ColorSlider
                     break;
                 case Keys.PageDown:
                     SetProperValue(Value - (int)_largeChange);
-                    if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.LargeDecrement, Value));
+                    if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.LargeDecrement, (int)Value));
                     break;
                 case Keys.PageUp:
                     SetProperValue(Value + (int)_largeChange);
-                    if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.LargeIncrement, Value));
+                    if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.LargeIncrement, (int)Value));
                     break;
             }
-            if (Scroll != null && Value == _minimum) Scroll(this, new ScrollEventArgs(ScrollEventType.First, Value));
-            if (Scroll != null && Value == _maximum) Scroll(this, new ScrollEventArgs(ScrollEventType.Last, Value));
+            if (Scroll != null && Value == _minimum) Scroll(this, new ScrollEventArgs(ScrollEventType.First, (int)Value));
+            if (Scroll != null && Value == _maximum) Scroll(this, new ScrollEventArgs(ScrollEventType.Last, (int)Value));
             Point pt = PointToClient(Cursor.Position);
             OnMouseMove(new MouseEventArgs(MouseButtons.None, 0, pt.X, pt.Y, 0));
         }
@@ -1791,7 +1808,7 @@ namespace ColorSlider
         /// Sets the trackbar value so that it wont exceed allowed range.
         /// </summary>
         /// <param name="val">The value.</param>
-        private void SetProperValue(int val)
+        private void SetProperValue(decimal val)
         {
             if (val < _minimum) Value = _minimum;
             else if (val > _maximum) Value = _maximum;
