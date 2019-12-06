@@ -103,6 +103,10 @@ namespace ColorSlider
         private Rectangle thumbHalfRect;
         private Rectangle elapsedRect; //bounding rectangle of elapsed area
 
+        // Margin left & right (bottom & Top)
+        private int OffsetL = 10;
+        private int OffsetR = 10;
+
         #region thumb
 
         private Rectangle thumbRect; //bounding rectangle of thumb area
@@ -1025,8 +1029,7 @@ namespace ColorSlider
             try
             {
                 //adjust drawing rects
-                barRect = ClientRectangle;
-                int wOffset = 5;
+                barRect = ClientRectangle;               
 
                 //set up thumbRect approprietly
                 if (_barOrientation == Orientation.Horizontal)
@@ -1034,14 +1037,14 @@ namespace ColorSlider
                     #region horizontal
                     if (_thumbImage != null)
                     {
-                        decimal TrackX = (((_trackerValue - _minimum) * (ClientRectangle.Width - _thumbImage.Width - 2*wOffset)) / (_maximum - _minimum));
-                        thumbRect = new Rectangle((int)TrackX + 2*wOffset, ClientRectangle.Height/2 - _thumbImage.Height/2, _thumbImage.Width, _thumbImage.Height);
+                        decimal TrackX = OffsetL + ((_trackerValue - _minimum) * (ClientRectangle.Width - OffsetL - OffsetR - _thumbImage.Width)) / (_maximum - _minimum);
+                        thumbRect = new Rectangle((int)TrackX, ClientRectangle.Height/2 - _thumbImage.Height/2, _thumbImage.Width, _thumbImage.Height);                        
                     }
                     else
                     {
-                        decimal TrackX = (((_trackerValue - _minimum) * (ClientRectangle.Width - _thumbSize.Width - 2*wOffset)) / (_maximum - _minimum));                        
-                        thumbRect = new Rectangle((int)TrackX + 2*wOffset, barRect.Y + ClientRectangle.Height/2 - _thumbSize.Height/2 , _thumbSize.Width, _thumbSize.Height);
-                    }
+                        decimal TrackX = OffsetL + ((_trackerValue - _minimum) * (ClientRectangle.Width - OffsetL - OffsetR - _thumbSize.Width)) / (_maximum - _minimum);
+                        thumbRect = new Rectangle((int)TrackX, barRect.Y + ClientRectangle.Height/2 - _thumbSize.Height/2 , _thumbSize.Width, _thumbSize.Height);                        
+                    }                    
                     #endregion
                 }
                 else
@@ -1049,26 +1052,27 @@ namespace ColorSlider
                     #region vertical
                     if (_thumbImage != null)
                     {                        
-                        decimal TrackY = (((_maximum - (_trackerValue)) * (ClientRectangle.Height - _thumbImage.Height)) / (_maximum - _minimum));
+                        decimal TrackY = OffsetR + ((_maximum - _trackerValue) * (ClientRectangle.Height - OffsetL -OffsetR - _thumbImage.Height)) / (_maximum - _minimum);
                         thumbRect = new Rectangle(ClientRectangle.Width/2 - _thumbImage.Width/2, (int)TrackY, _thumbImage.Width, _thumbImage.Height);
                     }
                     else
                     {                        
-                        decimal TrackY = (((_maximum - (_trackerValue)) * (ClientRectangle.Height - _thumbSize.Height)) / (_maximum - _minimum));
+                        decimal TrackY = OffsetR + ((_maximum - _trackerValue) * (ClientRectangle.Height - OffsetL - OffsetR - _thumbSize.Height)) / (_maximum - _minimum);
                         thumbRect = new Rectangle(barRect.X + ClientRectangle.Width/2 - _thumbSize.Width/2, (int)TrackY, _thumbSize.Width, _thumbSize.Height);
                     }
                     #endregion
                 }
 
-
                 thumbHalfRect = thumbRect;
                 LinearGradientMode gradientOrientation;
-
-
+              
                 if (_barOrientation == Orientation.Horizontal)
                 {
                     #region horizontal
-                    barRect.Inflate(-2*wOffset, -barRect.Height / 3);                    
+                                       
+                    barRect.X = barRect.X + OffsetL;
+                    barRect.Width = barRect.Width - OffsetL - OffsetR;
+
                     barHalfRect = barRect;
                     barHalfRect.Height /= 2;
 
@@ -1077,22 +1081,27 @@ namespace ColorSlider
 
                     thumbHalfRect.Height /= 2;
                     elapsedRect = barRect;
-                    elapsedRect.Width = thumbRect.Left - 2*wOffset + _thumbSize.Width / 2;
+                    elapsedRect.Width = (thumbRect.Left + _thumbSize.Width / 2) - OffsetL;                    
+
                     #endregion
                 }
                 else
                 {
                     #region vertical
-                    //barRect.Inflate(-barRect.Width / 3, 0);                    
+
+                    barRect.Y = barRect.Y + OffsetR;
+                    barRect.Height = barRect.Height - OffsetL - OffsetR;
+                    
                     barHalfRect = barRect;
                     barHalfRect.Width /= 2;
                    
                     gradientOrientation = LinearGradientMode.Vertical;
 
                     thumbHalfRect.Width /= 2;
-                    elapsedRect = barRect;                    
-                    elapsedRect.Height = barRect.Height - (thumbRect.Top + ThumbSize.Height / 2);
-                    elapsedRect.Y = 1 + thumbRect.Top + ThumbSize.Height/2;
+                    elapsedRect = barRect;
+
+                    elapsedRect.Height = barRect.Height - (thumbRect.Top + ThumbSize.Height / 2) + OffsetR;
+                    elapsedRect.Y = 1 + thumbRect.Top + ThumbSize.Height/2  + OffsetR;                    
 
                     #endregion
                 }
@@ -1118,7 +1127,7 @@ namespace ColorSlider
                 // draw the line on the whole lenght of the control
                 if (_barOrientation == Orientation.Horizontal)
                 {
-                    e.Graphics.DrawLine(new Pen(barInnerColorPaint, 1f), barRect.X, barRect.Y + barRect.Height/2, barRect.X + barRect.Width, barRect.Y + barRect.Height / 2);
+                    e.Graphics.DrawLine(new Pen(barInnerColorPaint, 1f), barRect.X, barRect.Y + barRect.Height/2, barRect.X + barRect.Width, barRect.Y + barRect.Height/2);
                 }
                 else
                 {
@@ -1132,7 +1141,7 @@ namespace ColorSlider
                 //draw elapsed inner bar (single line too)                               
                 if (_barOrientation == Orientation.Horizontal)
                 {
-                    e.Graphics.DrawLine(new Pen(elapsedInnerColorPaint, 1f), barRect.X, barRect.Y + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y + barRect.Height / 2);
+                    e.Graphics.DrawLine(new Pen(elapsedInnerColorPaint, 1f), barRect.X, barRect.Y + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y + barRect.Height/2);
                 }
                 else
                 {
@@ -1150,15 +1159,15 @@ namespace ColorSlider
                 {
                     #region horizontal
                     // Elapsed top
-                    e.Graphics.DrawLine(new Pen(ElapsedTopPenColorPaint, 1f), barRect.X, barRect.Y - 1 + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y - 1 + barRect.Height / 2);
+                    e.Graphics.DrawLine(new Pen(ElapsedTopPenColorPaint, 1f), barRect.X, barRect.Y - 1 + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y - 1 + barRect.Height/2);
                     // Elapsed bottom
-                    e.Graphics.DrawLine(new Pen(ElapsedBottomPenColorPaint, 1f), barRect.X, barRect.Y + 1 + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y + 1 + barRect.Height / 2);
+                    e.Graphics.DrawLine(new Pen(ElapsedBottomPenColorPaint, 1f), barRect.X, barRect.Y + 1 + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y + 1 + barRect.Height/2);
 
 
                     // Remain top
-                    e.Graphics.DrawLine(new Pen(barTopPenColorPaint, 1f), barRect.X + elapsedRect.Width, barRect.Y - 1 + barRect.Height / 2, barRect.X + barRect.Width, barRect.Y - 1 + barRect.Height / 2);
+                    e.Graphics.DrawLine(new Pen(barTopPenColorPaint, 1f), barRect.X + elapsedRect.Width, barRect.Y - 1 + barRect.Height / 2, barRect.X + barRect.Width, barRect.Y - 1 + barRect.Height/2);
                     // Remain bottom
-                    e.Graphics.DrawLine(new Pen(barBottomPenColorPaint, 1f), barRect.X + elapsedRect.Width, barRect.Y + 1 + barRect.Height / 2, barRect.X + barRect.Width, barRect.Y + 1 + barRect.Height / 2);
+                    e.Graphics.DrawLine(new Pen(barBottomPenColorPaint, 1f), barRect.X + elapsedRect.Width, barRect.Y + 1 + barRect.Height / 2, barRect.X + barRect.Width, barRect.Y + 1 + barRect.Height/2);
 
 
                     // Left vertical (dark)
@@ -1172,18 +1181,18 @@ namespace ColorSlider
                 {
                     #region vertical
                     // Elapsed top
-                    e.Graphics.DrawLine(new Pen(ElapsedTopPenColorPaint, 1f), barRect.X -1 + barRect.Width/2, barRect.Y + (barRect.Height - elapsedRect.Height), barRect.X - 1 + barRect.Width / 2, barRect.Y + barRect.Height);
+                    e.Graphics.DrawLine(new Pen(ElapsedTopPenColorPaint, 1f), barRect.X -1 + barRect.Width/2, barRect.Y + (barRect.Height - elapsedRect.Height), barRect.X - 1 + barRect.Width/2, barRect.Y + barRect.Height);
 
                     // Elapsed bottom
                     e.Graphics.DrawLine(new Pen(ElapsedBottomPenColorPaint, 1f), barRect.X + 1 + barRect.Width / 2, barRect.Y + (barRect.Height - elapsedRect.Height), barRect.X + 1 + barRect.Width/2, barRect.Y + barRect.Height);
 
 
                     // Remain top
-                    e.Graphics.DrawLine(new Pen(barTopPenColorPaint, 1f), barRect.X - 1 + barRect.Width / 2, barRect.Y, barRect.X - 1 + barRect.Width / 2, barRect.Y + barRect.Height - elapsedRect.Height);
+                    e.Graphics.DrawLine(new Pen(barTopPenColorPaint, 1f), barRect.X - 1 + barRect.Width / 2, barRect.Y, barRect.X - 1 + barRect.Width/2, barRect.Y + barRect.Height - elapsedRect.Height);
 
 
                     // Remain bottom
-                    e.Graphics.DrawLine(new Pen(barBottomPenColorPaint, 1f), barRect.X + 1 + barRect.Width / 2, barRect.Y, barRect.X + 1 + barRect.Width / 2, barRect.Y + barRect.Height - elapsedRect.Height);
+                    e.Graphics.DrawLine(new Pen(barBottomPenColorPaint, 1f), barRect.X + 1 + barRect.Width/2, barRect.Y, barRect.X + 1 + barRect.Width/2, barRect.Y + barRect.Height - elapsedRect.Height);
 
 
                     // top horizontal (dark) 
@@ -1284,6 +1293,7 @@ namespace ColorSlider
                     int start = 0;
                     int W = 0;
                     float rulerValue = 0;
+                    int offset = 0;
 
                     // Calculate width W to draw graduations 
                     // Remove the width of the thumb (half thumb at each end)
@@ -1294,12 +1304,14 @@ namespace ColorSlider
                         start = thumbRect.Width / 2;
                         W = barRect.Width - thumbRect.Width;
                         rulerValue = (float)_minimum;
+                        offset = 2 + thumbRect.Height/2;
                     }
                     else
                     {
                         start = thumbRect.Height / 2;
                         W = barRect.Height - thumbRect.Height;
                         rulerValue = (float)_maximum;
+                        offset = 2 + thumbRect.Width/2;
                     }
                     
                     // pen for ticks
@@ -1309,7 +1321,7 @@ namespace ColorSlider
                     int idx = 0;
                     int scaleL = 5;     // division length
                     int scaleS = 3;     // subdivision length    
-                    int offset = 6;
+                    
 
                     // strings graduations
                     // TODO: color for Text different?
@@ -1326,16 +1338,9 @@ namespace ColorSlider
                     Font font = this.Font;
                     SizeF maxsize = e.Graphics.MeasureString(str, font);
 
-                    //float lineLeftX, lineRightX = 0;
-                    //lineLeftX = ClientRectangle.X + maxsize.Width/2;                   
-                    //lineRightX = ClientRectangle.X + ClientRectangle.Width - maxsize.Width/2;
-
-
                     for (int i = 0; i <= _scaleDivisions; i++)
                     {
                         // Calculate current text size
-                        //double val = Math.Round(rulerValue);
-                        //double val = rulerValue;
                         float val = rulerValue;
 
                         // apply a transformation to the ticks displayed
@@ -1344,8 +1349,7 @@ namespace ColorSlider
 
                         if (_tickAdd != 0)
                             val = val + _tickAdd;
-
-                        //str = String.Format("{0,0:D}", val);
+                        
                         str = String.Format("{0:0.##}", val);
                         SizeF size = e.Graphics.MeasureString( str, font);
                         
@@ -1361,44 +1365,37 @@ namespace ColorSlider
                                 if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                                 {
                                     tx = (start + barRect.X + interval) - (float)(size.Width * 0.5);
-                                    //ty = ClientRectangle.Y;
-                                    ty = barRect.Y + barRect.Height / 2 - (1.5F)*(size.Height) - scaleL;
+                                    //ty = barRect.Y + barRect.Height / 2 - (1.5F)*(size.Height) - scaleL - offset;
+                                    ty = barRect.Y + barRect.Height/2 - size.Height - scaleL - offset;
                                     e.Graphics.DrawString(str, font, br, tx, ty);
                                 }
                                 if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
                                 {
                                     tx = (start + barRect.X + interval) - (float)(size.Width * 0.5);
-                                    //ty = ClientRectangle.Y + ClientRectangle.Height - (size.Height) + 3;                                    
-                                    ty = barRect.Y + barRect.Height/2 + (size.Height/2) + scaleL;
+                                    //ty = barRect.Y + barRect.Height/2 + (size.Height/2) + scaleL + offset;
+                                    ty = barRect.Y + barRect.Height/2 + scaleL + offset;
                                     e.Graphics.DrawString(str, font, br, tx, ty );
-                                }
-
-                                //startDiv = (int)size.Height;
+                                }                                
                             }
-
                             
                             // draw main ticks                           
                             if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                             {                                 
-                                x1 = start + barRect.X + interval;
-                                //y1 = ClientRectangle.Y + startDiv;
+                                x1 = start + barRect.X + interval;                                
                                 y1 = barRect.Y + barRect.Height/2 - scaleL - offset;
-                                x2 = start + barRect.X + interval;
-                                //y2 = ClientRectangle.Y + startDiv + scaleL;
+                                x2 = start + barRect.X + interval;                                
                                 y2 = barRect.Y + barRect.Height/2 - offset;
                                 e.Graphics.DrawLine(penTickL, x1, y1, x2, y2);
                             }
                             if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
                             {
 
-                                x1 = start + barRect.X + interval;
-                                //y1 = ClientRectangle.Y + ClientRectangle.Height - startDiv;
+                                x1 = start + barRect.X + interval;                                
                                 y1 = barRect.Y + barRect.Height/2 + offset;
                                 x2 = start + barRect.X + interval;
                                 y2 = barRect.Y + barRect.Height/2 + scaleL + offset;
                                 e.Graphics.DrawLine(penTickL, x1, y1, x2, y2);
                             }
-
                                   
                             rulerValue += (float)((_maximum - _minimum) / (_scaleDivisions));
 
@@ -1415,21 +1412,17 @@ namespace ColorSlider
                                         // Horizontal                            
                                         if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                                         {
-                                            x1 = start + barRect.X + interval;
-                                            //y1 = ClientRectangle.Y + startDiv;
+                                            x1 = start + barRect.X + interval;                                            
                                             y1 = barRect.Y + barRect.Height/2 -scaleS - offset;
-                                            x2 = start + barRect.X + interval;
-                                            //y2 = ClientRectangle.Y + startDiv + scaleS;
+                                            x2 = start + barRect.X + interval;                                            
                                             y2 = barRect.Y + barRect.Height/2 - offset;
                                             e.Graphics.DrawLine(penTickS, x1, y1, x2, y2);
                                         }
                                         if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
                                         {
-                                            x1 = start + barRect.X + interval;
-                                            //y1 = ClientRectangle.Y + ClientRectangle.Height - startDiv;
+                                            x1 = start + barRect.X + interval;                                            
                                             y1 = barRect.Y + barRect.Height/2 + offset;
-                                            x2 = start + barRect.X + interval;
-                                            //y2 = ClientRectangle.Y + ClientRectangle.Height - scaleS - startDiv;
+                                            x2 = start + barRect.X + interval;                                            
                                             y2 = barRect.Y + barRect.Height/2 + scaleS + offset;
                                             e.Graphics.DrawLine(penTickS, x1, y1, x2, y2);
                                         }
@@ -1466,21 +1459,17 @@ namespace ColorSlider
 
                             // draw main ticks                            
                             if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
-                            {
-                                //x1 = ClientRectangle.X + startDiv;
+                            {                                
                                 x1 = barRect.X + barRect.Width / 2 - scaleL - offset;
-                                y1 = start + barRect.Y + interval;
-                                //x2 = ClientRectangle.X + scaleL + startDiv;
+                                y1 = start + barRect.Y + interval;                             
                                 x2 = barRect.X + barRect.Width / 2 - offset;
                                 y2 = start + barRect.Y + interval;
                                 e.Graphics.DrawLine(penTickL, x1, y1, x2, y2);
                             }
                             if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
-                            {
-                                //x1 = ClientRectangle.X + ClientRectangle.Width - startDiv;
+                            {                                
                                 x1 = barRect.X + barRect.Width / 2 + offset;
-                                y1 = start + barRect.Y + interval;
-                                //x2 = ClientRectangle.X + ClientRectangle.Width - scaleL - startDiv;
+                                y1 = start + barRect.Y + interval;                             
                                 x2 = barRect.X + barRect.Width / 2 + scaleL + offset;
                                 y2 = start + barRect.Y + interval;
                                 e.Graphics.DrawLine(penTickL, x1, y1, x2, y2);
@@ -1499,21 +1488,17 @@ namespace ColorSlider
                                     if (_showSmallScale)
                                     {
                                         if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
-                                        {
-                                            //x1 = ClientRectangle.X + startDiv;
+                                        {                                            
                                             x1 = barRect.X + barRect.Width / 2 - scaleS - offset;
-                                            y1 = start + barRect.Y + interval;
-                                            //x2 = ClientRectangle.X + scaleS + startDiv;
+                                            y1 = start + barRect.Y + interval;                                         
                                             x2 = barRect.X + barRect.Width / 2 - offset;
                                             y2 = start + barRect.Y + interval;
                                             e.Graphics.DrawLine(penTickS, x1, y1, x2, y2);
                                         }
                                         if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
-                                        {
-                                            //x1 = ClientRectangle.X + ClientRectangle.Width - startDiv;
+                                        {                                            
                                             x1 = barRect.X + barRect.Width / 2 + offset;
-                                            y1 = start + barRect.Y + interval;
-                                            //x2 = ClientRectangle.X + ClientRectangle.Width - scaleS - startDiv;
+                                            y1 = start + barRect.Y + interval;                                         
                                             x2 = barRect.X + barRect.Width / 2 + scaleS + offset;
                                             y2 = start + barRect.Y + interval;
                                             e.Graphics.DrawLine(penTickS, x1, y1, x2, y2);
@@ -1521,14 +1506,11 @@ namespace ColorSlider
                                     }
                                 }
                             }
-
                             #endregion
                         }                       
                     }
                 }
                 #endregion
-
-
             }
             catch (Exception Err)
             {
@@ -1608,27 +1590,36 @@ namespace ColorSlider
             {
                 ScrollEventType set = ScrollEventType.ThumbPosition;
                 Point pt = e.Location;
-                int p = _barOrientation == Orientation.Horizontal ? pt.X : pt.Y;
-
-                //FAB
-                //decimal division = (_maximum - _minimum) / _smallChange;
-
+                int p = _barOrientation == Orientation.Horizontal ? pt.X : pt.Y;                
 
                 int margin = _thumbSize.Height >> 1;
                 p -= margin;
-
-                /*
-                float coef = (float)(_maximum - _minimum) /
-                             (float)
-                             ((_barOrientation == Orientation.Horizontal ? ClientSize.Width : ClientSize.Height) - 2 * margin);
-                */
-                decimal coef = (_maximum - _minimum) /                             
-                             ((_barOrientation == Orientation.Horizontal ? ClientSize.Width : ClientSize.Height) - 2 * margin);
-
-                _trackerValue = _barOrientation == Orientation.Horizontal ? (p * coef + _minimum) : (_maximum - (p * coef));
+                              
+                if (_barOrientation == Orientation.Horizontal)
+                {
+                    if (_thumbImage != null) 
+                    {                        
+                        _trackerValue = _minimum  + (p - OffsetL) * (_maximum - _minimum) / (ClientRectangle.Width - OffsetL -OffsetR - _thumbImage.Width);
+                    }
+                    else
+                    {                     
+                        _trackerValue = _minimum + (p - OffsetL) * (_maximum - _minimum) / (ClientRectangle.Width - OffsetL - OffsetR - _thumbSize.Width);
+                    }
+                }
+                else
+                {
+                    if (_thumbImage != null)
+                    {                        
+                        _trackerValue = _maximum - (p - OffsetR) * (_maximum - _minimum) / (ClientRectangle.Height - OffsetL - OffsetR - _thumbImage.Height);
+                    }
+                    else
+                    {                     
+                        _trackerValue = _maximum - (p - OffsetR) * (_maximum - _minimum) / (ClientRectangle.Height - OffsetL - OffsetR - _thumbSize.Height);
+                    }
+                }
 
                 // Number of divisions
-                int nbdiv = (int)(Math.Round(_trackerValue / _smallChange)); //(int)(_trackerValue / _smallChange);
+                int nbdiv = (int)(Math.Round(_trackerValue / _smallChange));
                 _trackerValue = nbdiv * _smallChange;
 
                 if (_trackerValue <= _minimum)
