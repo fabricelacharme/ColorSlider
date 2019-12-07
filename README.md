@@ -91,7 +91,7 @@ ThumbImage                | Gets or sets a specific image used to render the thu
 Orientation               | Gets or sets the orientation of the Slider(Horizontal or vertical)
 DrawFocusRectangle        | Gets or sets a value indicating whether to draw focus rectangle.
 MouseEffects              | Gets or sets whether mouse entry and exit actions have impact on how control look.
-Paading                   | Gets or Sets the margins inside the control (left & right if horizontal and bottom & top if vertical) to display the ticks with large numbers.  
+Padding                   | Gets or Sets the margins inside the control (left & right if horizontal and bottom & top if vertical) to display the ticks with large numbers.  
 **Values**                |  
 Value                     | Gets or sets the value of Slider
 Minimum (0)               | Gets or sets the minimum value.
