@@ -104,8 +104,8 @@ namespace ColorSlider
         private Rectangle elapsedRect; //bounding rectangle of elapsed area
 
         // Margin left & right (bottom & Top)
-        private int OffsetL = 10;
-        private int OffsetR = 10;
+        private int OffsetL = 0;
+        private int OffsetR = 0;
 
         #region thumb
 
@@ -257,6 +257,29 @@ namespace ColorSlider
 
 
         #region Appearance
+
+        private int _padding = 0;
+        /// <summary>
+        /// Gets or sets the padding (inside margins: left & right or bottom & top)
+        /// </summary>
+        /// <value>The padding.</value>
+        [Description("Set Slider padding (inside margins: left & right or bottom & top)")]
+        [Category("ColorSlider")]
+        [DefaultValue(0)]
+        public new int Padding
+        {
+            get { return _padding; }
+            set
+            {
+                if (_padding != value)
+                {
+                    _padding = value;                    
+                    OffsetL = OffsetR = _padding;
+
+                    Invalidate();
+                }
+            }
+        }
 
         private Orientation _barOrientation = Orientation.Horizontal;
         /// <summary>
