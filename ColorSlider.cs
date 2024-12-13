@@ -744,14 +744,14 @@ namespace ColorSlider
         public int ScaleDivisions
         {
             get { return _scaleDivisions; }
-            set {
+            set
+            {
                 if (value > 0)
                 {
-                    _scaleDivisions = value;                    
+                    _scaleDivisions = value;
+                    Invalidate();
                 }
                 //else throw new ArgumentOutOfRangeException("TickFreqency must be > 0 and < Maximum");
-
-                Invalidate();
             }
         }
 
@@ -767,14 +767,12 @@ namespace ColorSlider
             get { return _scaleSubDivisions; }
             set
             {
-                if (value > 0 && _scaleDivisions > 0)
-                { 
+                if (value > 0)
+                {
                     _scaleSubDivisions = value;
-                    
+                    Invalidate();
                 }
                 //else throw new ArgumentOutOfRangeException("TickSubFreqency must be > 0 and < TickFrequency");
-
-                Invalidate();
             }
         }
 
@@ -789,25 +787,8 @@ namespace ColorSlider
         {
             get { return _showSmallScale; }
             set {
-
-                if (value == true)
-                {
-                    if (_scaleDivisions > 0 && _scaleSubDivisions > 1)
-                    {
-                        _showSmallScale = value;
-                        Invalidate();
-                    }
-                    else
-                    {
-                        _showSmallScale = false;
-                    }
-                }
-                else
-                {
-                    _showSmallScale = value;
-                    // need to redraw 
-                    Invalidate();
-                }
+                _showSmallScale = value;
+                Invalidate();
             }
         }
 
@@ -1545,7 +1526,7 @@ namespace ColorSlider
                                     idx++;
                                     interval = idx * W / (nbticks - 1);
 
-                                    if (_showSmallScale)
+                                    if (ShallDrawSubdivisions())
                                     {
                                         // Horizontal                            
                                         if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
@@ -1623,7 +1604,7 @@ namespace ColorSlider
                                     idx++;
                                     interval = idx * W / (nbticks - 1);
 
-                                    if (_showSmallScale)
+                                    if (ShallDrawSubdivisions())
                                     {
                                         if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                                         {                                            
@@ -1971,6 +1952,15 @@ namespace ColorSlider
             if (pt.X > rect.Left & pt.X < rect.Right & pt.Y > rect.Top & pt.Y < rect.Bottom)
                 return true;
             else return false;
+        }
+
+        /// <summary>
+        /// Tell whether tick marks for small scale aka sub divisions shall be drawn.
+        /// </summary>
+        private bool ShallDrawSubdivisions()
+        {
+            return _showSmallScale
+                && _scaleSubDivisions > 1;
         }
 
         #endregion
