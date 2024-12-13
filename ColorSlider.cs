@@ -816,7 +816,7 @@ namespace ColorSlider
 
         private bool _showDivisionsText = true;
         /// <summary>
-        /// Shows Small Scale marking.
+        /// Show or hide text value of graduations.
         /// </summary>
         [Description("Show or hide text value of graduations")]
         [Category("ColorSlider")]
@@ -859,7 +859,7 @@ namespace ColorSlider
         }
 
         /// <summary>
-        /// Get or Sets the Font of the Text being displayed.
+        /// Get or Sets the Color of the Text being displayed.
         /// </summary>
         [Bindable(true),
         Browsable(true),

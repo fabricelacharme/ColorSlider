@@ -3,7 +3,7 @@ A slider/trackbar control in C#
 
 ![GitHub Logo](/gifs/colorslider.jpg)
 
-ColorSlider is a slider/trackbar control written in C# (Windows Form )
+ColorSlider is a slider/trackbar control written in C# (Windows Forms).
 This is an alternative/replacement to the standard Microsoft Visual Studio trackbar control which is not so flexible and lack basic functionalities.
 
 The code is a free interpretation of the original code from Michal Brylka published in the site Code Project.
@@ -64,7 +64,7 @@ The rest of the bar is also composed of 3 single lines (inner, top and bottom), 
 
 The thumb is drawn according to whether it is an image or not:
 * Image: `<e.Graphics.DrawImage(bmp, thumbRect, srceRect, GraphicsUnit.Pixel);>`
-* Drawn by the control,with a linear gradien `<e.Graphics.DrawPath(thumbPen, thumbPath);>`
+* Drawn by the control, with a linear gradient `<e.Graphics.DrawPath(thumbPen, thumbPath);>`
 
 The ticks and texts are drawn in two nested loops
 * a first loop from 0 to ScaleDividion for the main graduations and texts
@@ -89,7 +89,7 @@ DrawSemitransparentThumb  | Gets or sets a value indicating whether to draw semi
 ThumbImage                | Gets or sets a specific image used to render the thumb.
 **Appearance**            |  
 Orientation               | Gets or sets the orientation of the Slider(Horizontal or vertical)
-Thickness                 | Gets or sets the thickness of the Slider
+BarThickness              | Gets or sets the thickness of the Slider
 DrawFocusRectangle        | Gets or sets a value indicating whether to draw focus rectangle.
 MouseEffects              | Gets or sets whether mouse entry and exit actions have impact on how control look.
 Padding                   | Gets or Sets the margins inside the control (left & right if horizontal and bottom & top if vertical) to display the ticks with large numbers.  
