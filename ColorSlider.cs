@@ -767,7 +767,7 @@ namespace ColorSlider
             get { return _scaleSubDivisions; }
             set
             {
-                if (value > 0 && _scaleDivisions > 0 && (_maximum - _minimum) / (value * _scaleDivisions) > 0)
+                if (value > 0 && _scaleDivisions > 0)
                 { 
                     _scaleSubDivisions = value;
                     
@@ -792,7 +792,7 @@ namespace ColorSlider
 
                 if (value == true)
                 {
-                    if (_scaleDivisions > 0 && _scaleSubDivisions > 1 && (_maximum - _minimum) / (_scaleSubDivisions * _scaleDivisions) > 0)
+                    if (_scaleDivisions > 0 && _scaleSubDivisions > 1)
                     {
                         _showSmallScale = value;
                         Invalidate();
