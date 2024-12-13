@@ -265,6 +265,7 @@ namespace ColorSlider
         /// Gets or sets the thickness of the slider (default 1)
         /// </summary>
         [Description("Set Slider Thickness")]
+        [DefaultValue(1f)]
         public float BarThickness
         {
             get { return _barthickness; }
@@ -530,7 +531,8 @@ namespace ColorSlider
         /// </summary>
         /// <value>The inner color of the thumb.</value>
         [Description("Set Slider thumb inner color")]
-        [Category("ColorSlider")]        
+        [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "21, 56, 152")]
         public Color ThumbInnerColor
         {
             get { return _thumbInnerColor; }
@@ -547,7 +549,8 @@ namespace ColorSlider
         /// </summary>
         /// <value>The color of the thumb pen.</value>
         [Description("Set Slider thumb pen color")]
-        [Category("ColorSlider")]       
+        [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "21, 56, 152")]
         public Color ThumbPenColor
         {
             get { return _thumbPenColor; }
@@ -582,6 +585,7 @@ namespace ColorSlider
         /// </summary>
         [Description("Gets or sets the top color of the elapsed")]
         [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "95, 140, 180")]
         public Color ElapsedPenColorTop 
         {
             get { return _elapsedPenColorTop; }
@@ -598,6 +602,7 @@ namespace ColorSlider
         /// </summary>
         [Description("Gets or sets the bottom color of the elapsed")]
         [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "99, 130, 208")]
         public Color ElapsedPenColorBottom 
         {
             get { return _elapsedPenColorBottom; }
@@ -614,6 +619,7 @@ namespace ColorSlider
         /// </summary>
         [Description("Gets or sets the top color of the bar")]
         [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "55, 60, 74")]
         public Color BarPenColorTop
         {
             get { return _barPenColorTop; }
@@ -630,6 +636,7 @@ namespace ColorSlider
         /// </summary>
         [Description("Gets or sets the bottom color of the bar")]
         [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "87, 94, 110")]
         public Color BarPenColorBottom
         {
             get { return _barPenColorBottom; }
@@ -646,7 +653,8 @@ namespace ColorSlider
         /// </summary>
         /// <value>The inner color of the elapsed.</value>
         [Description("Set Slider's elapsed part inner color")]
-        [Category("ColorSlider")]        
+        [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "21, 56, 152")]
         public Color ElapsedInnerColor
         {
             get { return _elapsedInnerColor; }
@@ -662,7 +670,8 @@ namespace ColorSlider
         /// Gets or sets the color of the graduations
         /// </summary>
         [Description("Color of graduations")]
-        [Category("ColorSlider")]            
+        [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "White")]
         public Color TickColor
         {
             get { return _tickColor; }
@@ -690,6 +699,7 @@ namespace ColorSlider
 
         [Description("Gets or sets a value used to divide the graduation")]
         [Category("ColorSlider")]
+        [DefaultValue(0f)]
         public float TickDivide
         {
             get { return _tickDivide; }
@@ -702,6 +712,7 @@ namespace ColorSlider
         private float _tickAdd = 0;
         [Description("Gets or sets a value added to the graduation")]
         [Category("ColorSlider")]
+        [DefaultValue(0f)]
         public float TickAdd
         {
             get { return _tickAdd; }
@@ -732,6 +743,7 @@ namespace ColorSlider
         /// </summary>
         [Description("Set the number of intervals between minimum and maximum")]
         [Category("ColorSlider")]
+        [DefaultValue(typeof(decimal), "10")]
         public decimal ScaleDivisions
         {
             get { return _scaleDivisions; }
@@ -752,6 +764,7 @@ namespace ColorSlider
         /// </summary>
         [Description("Set the number of subdivisions between main divisions of graduation.")]
         [Category("ColorSlider")]
+        [DefaultValue(typeof(decimal), "5")]
         public decimal ScaleSubDivisions
         {
             get { return _scaleSubDivisions; }
@@ -774,6 +787,7 @@ namespace ColorSlider
         /// </summary>
         [Description("Show or hide subdivisions of graduations")]
         [Category("ColorSlider")]
+        [DefaultValue(false)]
         public bool ShowSmallScale
         {
             get { return _showSmallScale; }
@@ -806,6 +820,7 @@ namespace ColorSlider
         /// </summary>
         [Description("Show or hide text value of graduations")]
         [Category("ColorSlider")]
+        [DefaultValue(true)]
         public bool ShowDivisionsText
         {
             get { return _showDivisionsText; }
@@ -827,7 +842,8 @@ namespace ColorSlider
         Category("ColorSlider"),
         Description("Get or Sets the Font of the Text being displayed."),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible),
-        EditorBrowsable(EditorBrowsableState.Always)]
+        EditorBrowsable(EditorBrowsableState.Always),
+        DefaultValue(typeof(Font), "Microsoft Sans Serif, 6pt")]
         public override Font Font
         {
             get
@@ -850,7 +866,8 @@ namespace ColorSlider
         Category("ColorSlider"),
         Description("Get or Sets the Color of the Text being displayed."),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible),
-        EditorBrowsable(EditorBrowsableState.Always)]
+        EditorBrowsable(EditorBrowsableState.Always),
+        DefaultValue(typeof(Color), "White")]
         public override Color ForeColor {
             get
             {
