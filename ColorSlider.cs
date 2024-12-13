@@ -270,7 +270,7 @@ namespace ColorSlider
             get => _barthickness;
             set 
             {
-                if (Value >= 1)
+                if (value >= 1)
                 {
                     try
                     {
