@@ -267,19 +267,13 @@ namespace ColorSlider
         [Description("Set Slider Thickness")]
         public float BarThickness
         {
-            get => _barthickness;
+            get { return _barthickness; }
             set 
             {
                 if (value >= 1)
                 {
-                    try
-                    {
-                        _barthickness = value; Invalidate();
-                    }
-                    catch (Exception e) 
-                    {
-                        Console.WriteLine(e.Message);
-                    }
+                    _barthickness = value;
+                    Invalidate();
                 }
             }
         }
