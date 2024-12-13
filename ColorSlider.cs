@@ -406,7 +406,6 @@ namespace ColorSlider
         /// Gets or sets the minimum value.
         /// </summary>
         /// <value>The minimum value.</value>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when minimal value is greater than maximal one</exception>
         [Description("Set Slider minimal point")]
         [Category("ColorSlider")]
         [DefaultValue(typeof(decimal), "0")]
@@ -415,17 +414,15 @@ namespace ColorSlider
             get { return _minimum; }
             set
             {
-                if (value < _maximum)
-                {
-                    _minimum = value;
-                    if (_trackerValue < _minimum)
-                    {
-                        _trackerValue = _minimum;
-                        if (ValueChanged != null) ValueChanged(this, new EventArgs());
-                    }
-                    Invalidate();
-                }
-                else throw new ArgumentOutOfRangeException("Minimal value is greater than maximal one");
+                _minimum = value;
+
+                if (_maximum < value)
+                    _maximum = value;
+
+                if (Value < value)
+                    Value = value;
+
+                Invalidate();
             }
         }
 
@@ -434,7 +431,6 @@ namespace ColorSlider
         /// Gets or sets the maximum value.
         /// </summary>
         /// <value>The maximum value.</value>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when maximal value is lower than minimal one</exception>
         [Description("Set Slider maximal point")]
         [Category("ColorSlider")]
         [DefaultValue(typeof(decimal), "100")]
@@ -443,17 +439,15 @@ namespace ColorSlider
             get { return _maximum; }
             set
             {
-                if (value > _minimum)
-                {
-                    _maximum = value;
-                    if (_trackerValue > _maximum)
-                    {
-                        _trackerValue = _maximum;
-                        if (ValueChanged != null) ValueChanged(this, new EventArgs());
-                    }
-                    Invalidate();
-                }
-                //else throw new ArgumentOutOfRangeException("Maximal value is lower than minimal one");
+                _maximum = value;
+
+                if (_minimum > value)
+                    _minimum = value;
+
+                if (Value > value)
+                    Value = value;
+
+                Invalidate();
             }
         }
 
