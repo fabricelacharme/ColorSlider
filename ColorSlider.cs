@@ -71,6 +71,9 @@ namespace ColorSlider
     * 20/10/2024 - Version 1.0.0.6
     * Slidebar thickness can be modified
     * 
+    * 16/12/2024 - Version 1.0.0.7
+    * ScaleSubDivisions property counts intervals, not tick marks
+    * 
     */
 
     /// <summary>
@@ -770,7 +773,7 @@ namespace ColorSlider
             get { return _scaleSubDivisions; }
             set
             {
-                if (value > 0 && _scaleDivisions > 0 && (_maximum - _minimum) / ((value + 1) * _scaleDivisions) > 0)
+                if (value > 0 && _scaleDivisions > 0 && (_maximum - _minimum) / (value * _scaleDivisions) > 0)
                 { 
                     _scaleSubDivisions = value;
                     
@@ -795,7 +798,7 @@ namespace ColorSlider
 
                 if (value == true)
                 {
-                    if (_scaleDivisions > 0 && _scaleSubDivisions > 0 && (_maximum - _minimum) / ((_scaleSubDivisions + 1) * _scaleDivisions) > 0)
+                    if (_scaleDivisions > 0 && _scaleSubDivisions > 1 && (_maximum - _minimum) / (_scaleSubDivisions * _scaleDivisions) > 0)
                     {
                         _showSmallScale = value;
                         Invalidate();
@@ -1429,7 +1432,7 @@ namespace ColorSlider
                 if (_tickStyle != TickStyle.None)
                 {
                     //int x1, x2, y1, y2 = 0;
-                    int nbticks = 1 +  _scaleDivisions * (_scaleSubDivisions + 1);
+                    int nbticks = 1 +  _scaleDivisions * _scaleSubDivisions;
                     int interval = 0;
                     int start = 0;
                     int W = 0;
@@ -1543,7 +1546,7 @@ namespace ColorSlider
                             // Draw subdivisions
                             if (i < _scaleDivisions)
                             {
-                                for (int j = 0; j <= _scaleSubDivisions; j++)
+                                for (int j = 0; j < _scaleSubDivisions; j++)
                                 {
                                     idx++;
                                     interval = idx * W / (nbticks - 1);
@@ -1621,7 +1624,7 @@ namespace ColorSlider
                             // draw subdivisions
                             if (i < _scaleDivisions)
                             {
-                                for (int j = 0; j <= _scaleSubDivisions; j++)
+                                for (int j = 0; j < _scaleSubDivisions; j++)
                                 {
                                     idx++;
                                     interval = idx * W / (nbticks - 1);
