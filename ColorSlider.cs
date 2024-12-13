@@ -737,14 +737,14 @@ namespace ColorSlider
             }
         }
 
-        private decimal _scaleDivisions = 10;
+        private int _scaleDivisions = 10;
         /// <summary>
         /// How many divisions of maximum?
         /// </summary>
         [Description("Set the number of intervals between minimum and maximum")]
         [Category("ColorSlider")]
-        [DefaultValue(typeof(decimal), "10")]
-        public decimal ScaleDivisions
+        [DefaultValue(10)]
+        public int ScaleDivisions
         {
             get { return _scaleDivisions; }
             set {
@@ -758,14 +758,14 @@ namespace ColorSlider
             }
         }
 
-        private decimal _scaleSubDivisions = 5;
+        private int _scaleSubDivisions = 5;
         /// <summary>
         /// How many subdivisions for each division
         /// </summary>
         [Description("Set the number of subdivisions between main divisions of graduation.")]
         [Category("ColorSlider")]
-        [DefaultValue(typeof(decimal), "5")]
-        public decimal ScaleSubDivisions
+        [DefaultValue(5)]
+        public int ScaleSubDivisions
         {
             get { return _scaleSubDivisions; }
             set
@@ -1429,7 +1429,7 @@ namespace ColorSlider
                 if (_tickStyle != TickStyle.None)
                 {
                     //int x1, x2, y1, y2 = 0;
-                    int nbticks = 1 +  (int)(_scaleDivisions * (_scaleSubDivisions + 1));                    
+                    int nbticks = 1 +  _scaleDivisions * (_scaleSubDivisions + 1);
                     int interval = 0;
                     int start = 0;
                     int W = 0;
