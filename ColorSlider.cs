@@ -50,7 +50,7 @@ namespace ColorSlider
     * CodeProject: https://www.codeproject.com/Tips/1193311/Csharp-Slider-Trackbar-Control-using-Windows-Forms
     * Github: https://github.com/fabricelacharme/ColorSlider
     * 
-    * 20/11/17 - version 1.0.O.1
+    * 20/11/17 - version 1.0.0.1
     * 
     * Fixed: erroneous vertical display in case of minimum <> 0 (negative or positive)
     * Modified: DrawColorSlider, OnMouseMove
@@ -58,7 +58,7 @@ namespace ColorSlider
     * Added: Ticks display transformations
     * - TickAdd: allow to add a fixed value to the graduations: 
     *       usage: transform K = °C + 273,15, or °F = 1,8°C + 32   K = (°F + 459,67) / 1,8
-    * - TickDivide: allow to diveide by a fixed value the graduations 
+    * - TickDivide: allow to divide by a fixed value the graduations
     *       usage: divide by 1000 => display graduations in kilograms when in gram
     *       
     *       
@@ -74,7 +74,7 @@ namespace ColorSlider
     */
 
     /// <summary>
-    /// Encapsulates control that visualy displays certain integer value and allows user to change it within desired range. It imitates <see cref="System.Windows.Forms.TrackBar"/> as far as mouse usage is concerned.
+    /// Encapsulates control that visually displays certain integer value and allows user to change it within desired range. It imitates <see cref="System.Windows.Forms.TrackBar"/> as far as mouse usage is concerned.
     /// </summary>
     [ToolboxBitmap(typeof(TrackBar))]
     [DefaultEvent("Scroll"), DefaultProperty("BarInnerColor")]
@@ -129,7 +129,7 @@ namespace ColorSlider
         /// Gets or sets the size of the thumb.
         /// </summary>
         /// <value>The size of the thumb.</value>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when value is lower than zero or grather than half of appropiate dimension</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when value is lower than zero or greater than half of appropriate dimension</exception>
         [Description("Set Slider thumb size")]
         [Category("ColorSlider")]
         [DefaultValue(typeof(Size), "16, 16")]
@@ -146,7 +146,7 @@ namespace ColorSlider
                 }
                 else
                     throw new ArgumentOutOfRangeException(
-                        "TrackSize has to be greather than zero and lower than half of Slider width");                 
+                        "TrackSize has to be greater than zero and lower than half of Slider width");
 
                 Invalidate();
             }
@@ -403,7 +403,7 @@ namespace ColorSlider
         /// Gets or sets the minimum value.
         /// </summary>
         /// <value>The minimum value.</value>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when minimal value is greather than maximal one</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when minimal value is greater than maximal one</exception>
         [Description("Set Slider minimal point")]
         [Category("ColorSlider")]
         [DefaultValue(typeof(decimal), "0")]
@@ -422,7 +422,7 @@ namespace ColorSlider
                     }
                     Invalidate();
                 }
-                else throw new ArgumentOutOfRangeException("Minimal value is greather than maximal one");
+                else throw new ArgumentOutOfRangeException("Minimal value is greater than maximal one");
             }
         }
 
@@ -487,7 +487,7 @@ namespace ColorSlider
         /// Gets or sets the mouse wheel bar partitions.
         /// </summary>
         /// <value>The mouse wheel bar partitions.</value>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when value isn't greather than zero</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when value isn't greater than zero</exception>
         [Description("Set to how many parts is bar divided when using mouse wheel")]
         [Category("ColorSlider")]
         [DefaultValue(10)]
@@ -498,7 +498,7 @@ namespace ColorSlider
             {
                 if (value > 0)
                     _mouseWheelBarPartitions = value;
-                else throw new ArgumentOutOfRangeException("MouseWheelBarPartitions has to be greather than zero");
+                else throw new ArgumentOutOfRangeException("MouseWheelBarPartitions has to be greater than zero");
             }
         }
 
