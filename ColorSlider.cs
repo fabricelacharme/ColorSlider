@@ -132,7 +132,7 @@ namespace ColorSlider
         /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when value is lower than zero or grather than half of appropiate dimension</exception>
         [Description("Set Slider thumb size")]
         [Category("ColorSlider")]
-        [DefaultValue(16)]
+        [DefaultValue(typeof(Size), "16, 16")]
         public Size ThumbSize
         {
             get { return _thumbSize; }
@@ -181,7 +181,7 @@ namespace ColorSlider
         /// <value>The size of the thumb round rectangle edges.</value>
         [Description("Set Slider's thumb round rect size")]
         [Category("ColorSlider")]
-        [DefaultValue(typeof(Size), "16; 16")]
+        [DefaultValue(typeof(Size), "16, 16")]
         public Size ThumbRoundRectSize
         {
             get { return _thumbRoundRectSize; }
@@ -202,7 +202,7 @@ namespace ColorSlider
         /// <value>The size of the border round rect.</value>
         [Description("Set Slider's border round rect size")]
         [Category("ColorSlider")]
-        [DefaultValue(typeof(Size), "8; 8")]
+        [DefaultValue(typeof(Size), "8, 8")]
         public Size BorderRoundRectSize
         {
             get { return _borderRoundRectSize; }
@@ -381,7 +381,7 @@ namespace ColorSlider
         /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when value is outside appropriate range (min, max)</exception>
         [Description("Set Slider value")]
         [Category("ColorSlider")]
-        [DefaultValue(30)]
+        [DefaultValue(typeof(decimal), "30")]
         public decimal Value
         {
             get { return _trackerValue; }
@@ -405,7 +405,7 @@ namespace ColorSlider
         /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when minimal value is greather than maximal one</exception>
         [Description("Set Slider minimal point")]
         [Category("ColorSlider")]
-        [DefaultValue(0)]
+        [DefaultValue(typeof(decimal), "0")]
         public decimal Minimum
         {
             get { return _minimum; }
@@ -433,7 +433,7 @@ namespace ColorSlider
         /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when maximal value is lower than minimal one</exception>
         [Description("Set Slider maximal point")]
         [Category("ColorSlider")]
-        [DefaultValue(100)]
+        [DefaultValue(typeof(decimal), "100")]
         public decimal Maximum
         {
             get { return _maximum; }
@@ -460,7 +460,7 @@ namespace ColorSlider
         /// <value>The small change value.</value>
         [Description("Set trackbar's small change")]
         [Category("ColorSlider")]
-        [DefaultValue(1)]
+        [DefaultValue(typeof(decimal), "1")]
         public decimal SmallChange
         {
             get { return _smallChange; }
@@ -474,7 +474,7 @@ namespace ColorSlider
         /// <value>The large change value.</value>
         [Description("Set trackbar's large change")]
         [Category("ColorSlider")]
-        [DefaultValue(5)]
+        [DefaultValue(typeof(decimal), "5")]
         public decimal LargeChange
         {
             get { return _largeChange; }
