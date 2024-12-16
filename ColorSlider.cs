@@ -50,7 +50,7 @@ namespace ColorSlider
     * CodeProject: https://www.codeproject.com/Tips/1193311/Csharp-Slider-Trackbar-Control-using-Windows-Forms
     * Github: https://github.com/fabricelacharme/ColorSlider
     * 
-    * 20/11/17 - version 1.0.O.1
+    * 20/11/17 - version 1.0.0.1
     * 
     * Fixed: erroneous vertical display in case of minimum <> 0 (negative or positive)
     * Modified: DrawColorSlider, OnMouseMove
@@ -58,7 +58,7 @@ namespace ColorSlider
     * Added: Ticks display transformations
     * - TickAdd: allow to add a fixed value to the graduations: 
     *       usage: transform K = °C + 273,15, or °F = 1,8°C + 32   K = (°F + 459,67) / 1,8
-    * - TickDivide: allow to diveide by a fixed value the graduations 
+    * - TickDivide: allow to divide by a fixed value the graduations
     *       usage: divide by 1000 => display graduations in kilograms when in gram
     *       
     *       
@@ -71,10 +71,13 @@ namespace ColorSlider
     * 20/10/2024 - Version 1.0.0.6
     * Slidebar thickness can be modified
     * 
+    * 16/12/2024 - Version 1.0.0.7
+    * ScaleSubDivisions property counts intervals, not tick marks
+    * 
     */
 
     /// <summary>
-    /// Encapsulates control that visualy displays certain integer value and allows user to change it within desired range. It imitates <see cref="System.Windows.Forms.TrackBar"/> as far as mouse usage is concerned.
+    /// Encapsulates control that visually displays certain integer value and allows user to change it within desired range. It imitates <see cref="System.Windows.Forms.TrackBar"/> as far as mouse usage is concerned.
     /// </summary>
     [ToolboxBitmap(typeof(TrackBar))]
     [DefaultEvent("Scroll"), DefaultProperty("BarInnerColor")]
@@ -129,10 +132,10 @@ namespace ColorSlider
         /// Gets or sets the size of the thumb.
         /// </summary>
         /// <value>The size of the thumb.</value>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when value is lower than zero or grather than half of appropiate dimension</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when value is lower than zero or greater than half of appropriate dimension</exception>
         [Description("Set Slider thumb size")]
         [Category("ColorSlider")]
-        [DefaultValue(16)]
+        [DefaultValue(typeof(Size), "16, 16")]
         public Size ThumbSize
         {
             get { return _thumbSize; }
@@ -146,7 +149,7 @@ namespace ColorSlider
                 }
                 else
                     throw new ArgumentOutOfRangeException(
-                        "TrackSize has to be greather than zero and lower than half of Slider width");                 
+                        "TrackSize has to be greater than zero and lower than half of Slider width");
 
                 Invalidate();
             }
@@ -181,7 +184,7 @@ namespace ColorSlider
         /// <value>The size of the thumb round rectangle edges.</value>
         [Description("Set Slider's thumb round rect size")]
         [Category("ColorSlider")]
-        [DefaultValue(typeof(Size), "16; 16")]
+        [DefaultValue(typeof(Size), "16, 16")]
         public Size ThumbRoundRectSize
         {
             get { return _thumbRoundRectSize; }
@@ -202,7 +205,7 @@ namespace ColorSlider
         /// <value>The size of the border round rect.</value>
         [Description("Set Slider's border round rect size")]
         [Category("ColorSlider")]
-        [DefaultValue(typeof(Size), "8; 8")]
+        [DefaultValue(typeof(Size), "8, 8")]
         public Size BorderRoundRectSize
         {
             get { return _borderRoundRectSize; }
@@ -265,21 +268,16 @@ namespace ColorSlider
         /// Gets or sets the thickness of the slider (default 1)
         /// </summary>
         [Description("Set Slider Thickness")]
+        [DefaultValue(1f)]
         public float BarThickness
         {
-            get => _barthickness;
+            get { return _barthickness; }
             set 
             {
-                if (Value >= 1)
+                if (value >= 1)
                 {
-                    try
-                    {
-                        _barthickness = value; Invalidate();
-                    }
-                    catch (Exception e) 
-                    {
-                        Console.WriteLine(e.Message);
-                    }
+                    _barthickness = value;
+                    Invalidate();
                 }
             }
         }
@@ -387,7 +385,7 @@ namespace ColorSlider
         /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when value is outside appropriate range (min, max)</exception>
         [Description("Set Slider value")]
         [Category("ColorSlider")]
-        [DefaultValue(30)]
+        [DefaultValue(typeof(decimal), "30")]
         public decimal Value
         {
             get { return _trackerValue; }
@@ -408,26 +406,23 @@ namespace ColorSlider
         /// Gets or sets the minimum value.
         /// </summary>
         /// <value>The minimum value.</value>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when minimal value is greather than maximal one</exception>
         [Description("Set Slider minimal point")]
         [Category("ColorSlider")]
-        [DefaultValue(0)]
+        [DefaultValue(typeof(decimal), "0")]
         public decimal Minimum
         {
             get { return _minimum; }
             set
             {
-                if (value < _maximum)
-                {
-                    _minimum = value;
-                    if (_trackerValue < _minimum)
-                    {
-                        _trackerValue = _minimum;
-                        if (ValueChanged != null) ValueChanged(this, new EventArgs());
-                    }
-                    Invalidate();
-                }
-                else throw new ArgumentOutOfRangeException("Minimal value is greather than maximal one");
+                _minimum = value;
+
+                if (_maximum < value)
+                    _maximum = value;
+
+                if (Value < value)
+                    Value = value;
+
+                Invalidate();
             }
         }
 
@@ -436,26 +431,23 @@ namespace ColorSlider
         /// Gets or sets the maximum value.
         /// </summary>
         /// <value>The maximum value.</value>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when maximal value is lower than minimal one</exception>
         [Description("Set Slider maximal point")]
         [Category("ColorSlider")]
-        [DefaultValue(100)]
+        [DefaultValue(typeof(decimal), "100")]
         public decimal Maximum
         {
             get { return _maximum; }
             set
             {
-                if (value > _minimum)
-                {
-                    _maximum = value;
-                    if (_trackerValue > _maximum)
-                    {
-                        _trackerValue = _maximum;
-                        if (ValueChanged != null) ValueChanged(this, new EventArgs());
-                    }
-                    Invalidate();
-                }
-                //else throw new ArgumentOutOfRangeException("Maximal value is lower than minimal one");
+                _maximum = value;
+
+                if (_minimum > value)
+                    _minimum = value;
+
+                if (Value > value)
+                    Value = value;
+
+                Invalidate();
             }
         }
 
@@ -466,7 +458,7 @@ namespace ColorSlider
         /// <value>The small change value.</value>
         [Description("Set trackbar's small change")]
         [Category("ColorSlider")]
-        [DefaultValue(1)]
+        [DefaultValue(typeof(decimal), "1")]
         public decimal SmallChange
         {
             get { return _smallChange; }
@@ -480,7 +472,7 @@ namespace ColorSlider
         /// <value>The large change value.</value>
         [Description("Set trackbar's large change")]
         [Category("ColorSlider")]
-        [DefaultValue(5)]
+        [DefaultValue(typeof(decimal), "5")]
         public decimal LargeChange
         {
             get { return _largeChange; }
@@ -492,7 +484,7 @@ namespace ColorSlider
         /// Gets or sets the mouse wheel bar partitions.
         /// </summary>
         /// <value>The mouse wheel bar partitions.</value>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when value isn't greather than zero</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when value isn't greater than zero</exception>
         [Description("Set to how many parts is bar divided when using mouse wheel")]
         [Category("ColorSlider")]
         [DefaultValue(10)]
@@ -503,7 +495,7 @@ namespace ColorSlider
             {
                 if (value > 0)
                     _mouseWheelBarPartitions = value;
-                else throw new ArgumentOutOfRangeException("MouseWheelBarPartitions has to be greather than zero");
+                else throw new ArgumentOutOfRangeException("MouseWheelBarPartitions has to be greater than zero");
             }
         }
 
@@ -536,7 +528,8 @@ namespace ColorSlider
         /// </summary>
         /// <value>The inner color of the thumb.</value>
         [Description("Set Slider thumb inner color")]
-        [Category("ColorSlider")]        
+        [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "21, 56, 152")]
         public Color ThumbInnerColor
         {
             get { return _thumbInnerColor; }
@@ -553,7 +546,8 @@ namespace ColorSlider
         /// </summary>
         /// <value>The color of the thumb pen.</value>
         [Description("Set Slider thumb pen color")]
-        [Category("ColorSlider")]       
+        [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "21, 56, 152")]
         public Color ThumbPenColor
         {
             get { return _thumbPenColor; }
@@ -588,6 +582,7 @@ namespace ColorSlider
         /// </summary>
         [Description("Gets or sets the top color of the elapsed")]
         [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "95, 140, 180")]
         public Color ElapsedPenColorTop 
         {
             get { return _elapsedPenColorTop; }
@@ -604,6 +599,7 @@ namespace ColorSlider
         /// </summary>
         [Description("Gets or sets the bottom color of the elapsed")]
         [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "99, 130, 208")]
         public Color ElapsedPenColorBottom 
         {
             get { return _elapsedPenColorBottom; }
@@ -620,6 +616,7 @@ namespace ColorSlider
         /// </summary>
         [Description("Gets or sets the top color of the bar")]
         [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "55, 60, 74")]
         public Color BarPenColorTop
         {
             get { return _barPenColorTop; }
@@ -636,6 +633,7 @@ namespace ColorSlider
         /// </summary>
         [Description("Gets or sets the bottom color of the bar")]
         [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "87, 94, 110")]
         public Color BarPenColorBottom
         {
             get { return _barPenColorBottom; }
@@ -652,7 +650,8 @@ namespace ColorSlider
         /// </summary>
         /// <value>The inner color of the elapsed.</value>
         [Description("Set Slider's elapsed part inner color")]
-        [Category("ColorSlider")]        
+        [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "21, 56, 152")]
         public Color ElapsedInnerColor
         {
             get { return _elapsedInnerColor; }
@@ -668,7 +667,8 @@ namespace ColorSlider
         /// Gets or sets the color of the graduations
         /// </summary>
         [Description("Color of graduations")]
-        [Category("ColorSlider")]            
+        [Category("ColorSlider")]
+        [DefaultValue(typeof(Color), "White")]
         public Color TickColor
         {
             get { return _tickColor; }
@@ -696,6 +696,7 @@ namespace ColorSlider
 
         [Description("Gets or sets a value used to divide the graduation")]
         [Category("ColorSlider")]
+        [DefaultValue(0f)]
         public float TickDivide
         {
             get { return _tickDivide; }
@@ -708,6 +709,7 @@ namespace ColorSlider
         private float _tickAdd = 0;
         [Description("Gets or sets a value added to the graduation")]
         [Category("ColorSlider")]
+        [DefaultValue(0f)]
         public float TickAdd
         {
             get { return _tickAdd; }
@@ -732,45 +734,45 @@ namespace ColorSlider
             }
         }
 
-        private decimal _scaleDivisions = 10;
+        private int _scaleDivisions = 10;
         /// <summary>
         /// How many divisions of maximum?
         /// </summary>
         [Description("Set the number of intervals between minimum and maximum")]
         [Category("ColorSlider")]
-        public decimal ScaleDivisions
+        [DefaultValue(10)]
+        public int ScaleDivisions
         {
             get { return _scaleDivisions; }
-            set {
+            set
+            {
                 if (value > 0)
                 {
-                    _scaleDivisions = value;                    
+                    _scaleDivisions = value;
+                    Invalidate();
                 }
                 //else throw new ArgumentOutOfRangeException("TickFreqency must be > 0 and < Maximum");
-
-                Invalidate();
             }
         }
 
-        private decimal _scaleSubDivisions = 5;
+        private int _scaleSubDivisions = 5;
         /// <summary>
         /// How many subdivisions for each division
         /// </summary>
         [Description("Set the number of subdivisions between main divisions of graduation.")]
         [Category("ColorSlider")]
-        public decimal ScaleSubDivisions
+        [DefaultValue(5)]
+        public int ScaleSubDivisions
         {
             get { return _scaleSubDivisions; }
             set
             {
-                if (value > 0 && _scaleDivisions > 0 && (_maximum - _minimum) / ((value + 1) * _scaleDivisions) > 0)
-                { 
+                if (value > 0)
+                {
                     _scaleSubDivisions = value;
-                    
+                    Invalidate();
                 }
                 //else throw new ArgumentOutOfRangeException("TickSubFreqency must be > 0 and < TickFrequency");
-
-                Invalidate();
             }
         }
 
@@ -780,38 +782,23 @@ namespace ColorSlider
         /// </summary>
         [Description("Show or hide subdivisions of graduations")]
         [Category("ColorSlider")]
+        [DefaultValue(false)]
         public bool ShowSmallScale
         {
             get { return _showSmallScale; }
             set {
-
-                if (value == true)
-                {
-                    if (_scaleDivisions > 0 && _scaleSubDivisions > 0 && (_maximum - _minimum) / ((_scaleSubDivisions + 1) * _scaleDivisions) > 0)
-                    {
-                        _showSmallScale = value;
-                        Invalidate();
-                    }
-                    else
-                    {
-                        _showSmallScale = false;
-                    }
-                }
-                else
-                {
-                    _showSmallScale = value;
-                    // need to redraw 
-                    Invalidate();
-                }
+                _showSmallScale = value;
+                Invalidate();
             }
         }
 
         private bool _showDivisionsText = true;
         /// <summary>
-        /// Shows Small Scale marking.
+        /// Show or hide text value of graduations.
         /// </summary>
         [Description("Show or hide text value of graduations")]
         [Category("ColorSlider")]
+        [DefaultValue(true)]
         public bool ShowDivisionsText
         {
             get { return _showDivisionsText; }
@@ -833,7 +820,8 @@ namespace ColorSlider
         Category("ColorSlider"),
         Description("Get or Sets the Font of the Text being displayed."),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible),
-        EditorBrowsable(EditorBrowsableState.Always)]
+        EditorBrowsable(EditorBrowsableState.Always),
+        DefaultValue(typeof(Font), "Microsoft Sans Serif, 6pt")]
         public override Font Font
         {
             get
@@ -849,14 +837,15 @@ namespace ColorSlider
         }
 
         /// <summary>
-        /// Get or Sets the Font of the Text being displayed.
+        /// Get or Sets the Color of the Text being displayed.
         /// </summary>
         [Bindable(true),
         Browsable(true),
         Category("ColorSlider"),
         Description("Get or Sets the Color of the Text being displayed."),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible),
-        EditorBrowsable(EditorBrowsableState.Always)]
+        EditorBrowsable(EditorBrowsableState.Always),
+        DefaultValue(typeof(Color), "White")]
         public override Color ForeColor {
             get
             {
@@ -1418,7 +1407,7 @@ namespace ColorSlider
                 if (_tickStyle != TickStyle.None)
                 {
                     //int x1, x2, y1, y2 = 0;
-                    int nbticks = 1 +  (int)(_scaleDivisions * (_scaleSubDivisions + 1));                    
+                    int nbticks = 1 +  _scaleDivisions * _scaleSubDivisions;
                     int interval = 0;
                     int start = 0;
                     int W = 0;
@@ -1532,12 +1521,12 @@ namespace ColorSlider
                             // Draw subdivisions
                             if (i < _scaleDivisions)
                             {
-                                for (int j = 0; j <= _scaleSubDivisions; j++)
+                                for (int j = 0; j < _scaleSubDivisions; j++)
                                 {
                                     idx++;
                                     interval = idx * W / (nbticks - 1);
 
-                                    if (_showSmallScale)
+                                    if (ShallDrawSubdivisions())
                                     {
                                         // Horizontal                            
                                         if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
@@ -1610,12 +1599,12 @@ namespace ColorSlider
                             // draw subdivisions
                             if (i < _scaleDivisions)
                             {
-                                for (int j = 0; j <= _scaleSubDivisions; j++)
+                                for (int j = 0; j < _scaleSubDivisions; j++)
                                 {
                                     idx++;
                                     interval = idx * W / (nbticks - 1);
 
-                                    if (_showSmallScale)
+                                    if (ShallDrawSubdivisions())
                                     {
                                         if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                                         {                                            
@@ -1963,6 +1952,15 @@ namespace ColorSlider
             if (pt.X > rect.Left & pt.X < rect.Right & pt.Y > rect.Top & pt.Y < rect.Bottom)
                 return true;
             else return false;
+        }
+
+        /// <summary>
+        /// Tell whether tick marks for small scale aka sub divisions shall be drawn.
+        /// </summary>
+        private bool ShallDrawSubdivisions()
+        {
+            return _showSmallScale
+                && _scaleSubDivisions > 1;
         }
 
         #endregion

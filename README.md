@@ -3,7 +3,7 @@ A slider/trackbar control in C#
 
 ![GitHub Logo](/gifs/colorslider.jpg)
 
-ColorSlider is a slider/trackbar control written in C# (Windows Form )
+ColorSlider is a slider/trackbar control written in C# (Windows Forms).
 This is an alternative/replacement to the standard Microsoft Visual Studio trackbar control which is not so flexible and lack basic functionalities.
 
 The code is a free interpretation of the original code from Michal Brylka published in the site Code Project.
@@ -64,7 +64,7 @@ The rest of the bar is also composed of 3 single lines (inner, top and bottom), 
 
 The thumb is drawn according to whether it is an image or not:
 * Image: `<e.Graphics.DrawImage(bmp, thumbRect, srceRect, GraphicsUnit.Pixel);>`
-* Drawn by the control,with a linear gradien `<e.Graphics.DrawPath(thumbPen, thumbPath);>`
+* Drawn by the control, with a linear gradient `<e.Graphics.DrawPath(thumbPen, thumbPath);>`
 
 The ticks and texts are drawn in two nested loops
 * a first loop from 0 to ScaleDividion for the main graduations and texts
@@ -72,7 +72,7 @@ The ticks and texts are drawn in two nested loops
 
 The offset between each tick is a multiple of `<W/(nbticks -1)>` where:
 * W is the width of the bar minus the width of the thumb, in order that when the thumb is at minimum position or maximum position, the graduation coincide with the middle of the thumb
-* nbticks is the number of graduations including subdivisions: `<nbticks = 1 +  _scaleDivisions * (_scaleSubDivisions + 1);>`
+* nbticks is the number of graduations including subdivisions: `<nbticks = 1 + _scaleDivisions * _scaleSubDivisions>`
 
 So, as you see, nothing very difficult in this control. You just have to draw lines and calculate precisely where they start and where they end...  
 
@@ -89,7 +89,7 @@ DrawSemitransparentThumb  | Gets or sets a value indicating whether to draw semi
 ThumbImage                | Gets or sets a specific image used to render the thumb.
 **Appearance**            |  
 Orientation               | Gets or sets the orientation of the Slider(Horizontal or vertical)
-Thickness                 | Gets or sets the thickness of the Slider
+BarThickness              | Gets or sets the thickness of the Slider
 DrawFocusRectangle        | Gets or sets a value indicating whether to draw focus rectangle.
 MouseEffects              | Gets or sets whether mouse entry and exit actions have impact on how control look.
 Padding                   | Gets or Sets the margins inside the control (left & right if horizontal and bottom & top if vertical) to display the ticks with large numbers.  
